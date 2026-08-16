@@ -3,124 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ငါးပြစ်ဂိမ်း</title>
+<title>Fish Shooter</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
 font-family:sans-serif;
 }
 
 body{
-overflow:hidden;
-height:100vh;
-background:linear-gradient(to bottom,#001d3d,#003566,#0077b6,#00b4d8);
+background:linear-gradient(#0b9be0,#003b70);
 }
 
 #game{
-width:100%;
-height:100vh;
 position:relative;
+width:100vw;
+height:100vh;
+overflow:hidden;
 }
 
 .topbar{
 position:absolute;
 top:10px;
 left:10px;
-background:rgba(0,0,0,.5);
-padding:10px 15px;
-border-radius:15px;
-color:white;
-font-size:20px;
-z-index:100;
-}
-
-.betbox{
-position:absolute;
-top:10px;
 right:10px;
 display:flex;
-gap:5px;
+justify-content:space-between;
 z-index:100;
 }
 
-.betbtn{
+.box{
+background:rgba(0,0,0,.5);
 padding:10px 15px;
-border:none;
 border-radius:10px;
+color:#fff;
 font-weight:bold;
-}
-
-.message{
-position:absolute;
-top:70px;
-left:50%;
-transform:translateX(-50%);
-color:yellow;
-font-size:24px;
-font-weight:bold;
-z-index:100;
 }
 
 .fish{
 position:absolute;
-font-size:50px;
+font-size:45px;
 cursor:pointer;
 user-select:none;
-z-index:5;
 }
 
-.cannon{
+.bottom-bar{
 position:absolute;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-font-size:80px;
-z-index:20;
+bottom:0;
+left:0;
+width:100%;
+height:90px;
+background:rgba(0,120,140,.85);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px;
 }
 
-.controls{
-position:absolute;
-bottom:35px;
-left:20px;
+.power{
 display:flex;
 gap:10px;
-z-index:20;
 }
 
-.ctrlbtn{
-width:60px;
-height:60px;
+.power button{
+width:50px;
+height:50px;
 border:none;
 border-radius:50%;
-font-size:28px;
+font-size:30px;
 font-weight:bold;
 }
 
-.shoot{
-position:absolute;
-bottom:20px;
-right:20px;
-width:100px;
-height:100px;
+.gun{
+font-size:55px;
+}
+
+.fire-btn{
+width:85px;
+height:85px;
 border:none;
 border-radius:50%;
 background:red;
 color:white;
-font-size:25px;
+font-size:20px;
 font-weight:bold;
-box-shadow:0 0 20px red;
-z-index:20;
-}
-
-.sea{
-position:absolute;
-bottom:0;
-width:100%;
-height:120px;
-background:rgba(0,100,0,.25);
+box-shadow:0 0 15px red;
 }
 </style>
 </head>
@@ -130,112 +105,107 @@ background:rgba(0,100,0,.25);
 <div id="game">
 
 <div class="topbar">
-💰 Coins : <span id="coins">1000</span>
+<div class="box">💰 Coins : <span id="coins">1000</span></div>
+<div class="box">🎯 Score : <span id="score">0</span></div>
 </div>
 
-<div class="betbox">
-<button class="betbtn" onclick="bet=10">10</button>
-<button class="betbtn" onclick="bet=50">50</button>
-<button class="betbtn" onclick="bet=100">100</button>
+<div class="bottom-bar">
+
+<div class="power">
+<button onclick="downPower()">-</button>
+<button onclick="upPower()">+</button>
 </div>
 
-<div class="message" id="msg">
-🎯 ငါးကိုနှိပ်ပြီး ဖမ်းပါ
+<div class="gun">🔫</div>
+
+<button class="fire-btn" onclick="fireGun()">FIRE</button>
+
 </div>
-
-<div class="controls">
-<button class="ctrlbtn" onclick="bet=Math.max(10,bet-10)">➖</button>
-<button class="ctrlbtn" onclick="bet+=10">➕</button>
-</div>
-
-<div class="cannon">🔫</div>
-
-<button class="shoot" onclick="shootFish()">
-FIRE
-</button>
-
-<div class="sea"></div>
 
 </div>
 
 <script>
 
-let coins = 1000;
-let bet = 10;
+let coins=1000;
+let score=0;
+let power=10;
 
-function updateCoins(){
-document.getElementById("coins").innerText = coins;
+function updateUI(){
+document.getElementById("coins").innerText=coins;
+document.getElementById("score").innerText=score;
 }
 
-function shootFish(){
-
-coins -= bet;
-
-if(coins < 0){
-coins = 0;
+function upPower(){
+power+=10;
 }
 
-updateCoins();
+function downPower(){
+if(power>10){
+power-=10;
+}
+}
 
-document.getElementById("msg").innerHTML =
-"💥 ပစ်လိုက်ပြီ - " + bet + " Coins";
+function fireGun(){
+
+if(coins<power){
+alert("Coins မလုံလောက်ပါ");
+return;
+}
+
+coins-=power;
+updateUI();
 }
 
 function createFish(){
 
-const fish = document.createElement("div");
+const fish=document.createElement("div");
 
-fish.className = "fish";
+const fishes=["🐟","🐠","🐡","🦈"];
 
-const list = ["🐟","🐠","🐡","🦈"];
+fish.className="fish";
 
-fish.innerHTML =
-list[Math.floor(Math.random()*list.length)];
+fish.innerHTML=fishes[
+Math.floor(Math.random()*fishes.length)
+];
 
-fish.style.top =
-Math.random()*75 + "%";
-
-fish.style.left = "-80px";
+fish.style.top=Math.random()*70+"vh";
+fish.style.left="-60px";
 
 document.getElementById("game").appendChild(fish);
 
-let pos = -80;
+let x=-60;
 
-const move = setInterval(()=>{
+const move=setInterval(()=>{
 
-pos += 3;
+x+=3;
 
-fish.style.left = pos + "px";
+fish.style.left=x+"px";
 
-if(pos > window.innerWidth){
-
+if(x>window.innerWidth){
 clearInterval(move);
-
 fish.remove();
-
 }
 
 },30);
 
-fish.onclick = function(){
+fish.onclick=function(){
 
-coins += bet * 2;
+score+=power*2;
+coins+=power;
 
-updateCoins();
-
-document.getElementById("msg").innerHTML =
-"🎯 ထိမှန် + " + (bet*2) + " Coins";
-
-fish.remove();
+updateUI();
 
 clearInterval(move);
 
+fish.remove();
+
 };
+
 }
 
-setInterval(createFish,1500);
+setInterval(createFish,1200);
 
-updateCoins();
+updateUI();
 
 </script>
 
