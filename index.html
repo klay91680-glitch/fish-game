@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ငါးပြစ်ဂိမ်း</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Padauk', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 28px; margin-bottom: 10px; }
+        .score-board {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .score-board span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #F1C40F;
+        }
+        .fish-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .fish-btn {
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .fish-btn:active { transform: scale(0.95); }
+        .fish-btn .emoji {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result-area {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            min-height: 50px;
+            font-size: 18px;
+        }
+        .reset-btn {
+            background: #E74C3C;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .version { font-size: 12px; opacity: 0.5; margin-top: 15px; }
+        #playerId { font-size: 14px; opacity: 0.7; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="gameTitle">🐟 ငါးပြစ်ဂိမ်း</h1>
+        <p id="playerId">👤 ကစားသမား: loading...</p>
+        <div class="score-board">
+            📊 ရမှတ်: <span id="scoreDisplay">0</span>
+            &nbsp;|&nbsp; 🎣 မိခဲ့တဲ့ငါး: <span id="fishCount">0</span>
+        </div>
+        <div class="fish-grid" id="buttonContainer">
+            <p style="grid-column: span 2; color: #aaa;">⏳ ခလုတ်တွေ လုပ်နေပါပြီ...</p>
+        </div>
+        <div class="result-area" id="resultArea">👋 ငါးတစ်ကောင်ကို နှိပ်ပါ။</div>
+        <button class="reset-btn" onclick="resetGame()">🔄 ပြန်စမယ်</button>
+        <div class="version" id="versionDisplay">v1.0.0</div>
+    </div>
+    <script>
+        let currentScore = 0, fishCaught = 0, playerId = '', buttonConfigs = [];
+        
+        window.onload = function() {
+            if (localStorage.getItem('playerId')) {
+                playerId = localStorage.getItem('playerId');
+            } else {
+                playerId = 'player_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('playerId', playerId);
+            }
+            document.getElementById('playerId').innerText = '👤 ကစားသမား: ' + playerId;
+            
+            const data = {
+                "gameTitle": "🐟 ငါးပြစ်ဂိမ်း",
+                "buttons": [
+                    {"id": "fish_golden", "label": "🐠 ငါးရွှေ", "color": "#F1C40F", "points": 10, "emoji": "🐠"},
+                    {"id": "fish_blue", "label": "🐟 ငါးပြာ", "color": "#3498DB", "points": 5, "emoji": "🐟"},
+                    {"id": "fish_red", "label": "🐡 ငါးဖောင်း", "color": "#E74C3C", "points": 15, "emoji": "🐡"},
+                    {"id": "fish_green", "label": "🐊 ငါးလိပ်ကျောက်", "color": "#2ECC71", "points": 20, "emoji": "🐊"}
+                ],
+                "version": "1.0.0"
+            };
+            
+            document.getElementById('gameTitle').innerText = data.gameTitle;
+            document.getElementById('versionDisplay').innerText = 'v' + data.version;
+            buttonConfigs = data.buttons;
+            loadLocalData();
+            createButtons(data.buttons);
+        };
+        
+        function loadLocalData() {
+            const savedScore = localStorage.getItem('score_' + playerId);
+            const savedFish = localStorage.getItem('fish_' + playerId);
+            if (savedScore) currentScore = parseInt(savedScore);
+            if (savedFish) fishCaught = parseInt(savedFish);
+            updateDisplay();
+        }
+        
+        function saveLocalData() {
+            localStorage.setItem('score_' + playerId, currentScore);
+            localStorage.setItem('fish_' + playerId, fishCaught);
+        }
+        
+        function updateDisplay() {
+            document.getElementById('scoreDisplay').innerText = currentScore;
+            document.getElementById('fishCount').innerText = fishCaught;
+        }
+        
+        function createButtons(buttons) {
+            const container = document.getElementById('buttonContainer');
+            container.innerHTML = '';
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = 'fish-btn';
+                button.style.backgroundColor = btn.color;
+                button.setAttribute('data-id', btn.id);
+                button.setAttribute('data-points', btn.points);
+                button.innerHTML = `<span class="emoji">${btn.emoji}</span> ${btn.label}`;
+                button.onclick = function() { handleFishClick(this); };
+                container.appendChild(button);
+            });
+        }
+        
+        function handleFishClick(button) {
+            const points = parseInt(button.getAttribute('data-points'));
+            currentScore += points;
+            fishCaught += 1;
+            saveLocalData();
+            updateDisplay();
+            
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `🎣 ငါးမိလိုက်တယ်! <br> +${points} ပွိုင့် ရသွားတယ်။`;
+            resultArea.style.borderLeft = `4px solid ${button.style.backgroundColor}`;
+        }
+        
+        function resetGame() {
+            if (confirm('ဂိမ်းကို ပြန်စမှာ သေချာလား?')) {
+                currentScore = 0;
+                fishCaught = 0;
+                saveLocalData();
+                updateDisplay();
+                document.getElementById('resultArea').innerHTML = '🔄 ဂိမ်းကို ပြန်စလိုက်ပါပြီ။';
+                document.getElementById('resultArea').style.borderLeft = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
