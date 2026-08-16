@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="my">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,247 +10,202 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:sans-serif;
 }
 
 body{
-background:#0f172a;
-color:white;
+overflow:hidden;
+background:url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200') center/cover;
+height:100vh;
+font-family:sans-serif;
+}
+
+#game{
+width:100%;
+height:100vh;
+position:relative;
+}
+
+.top{
+position:absolute;
+top:10px;
+left:10px;
+z-index:100;
+background:rgba(0,0,0,.6);
+padding:10px;
+border-radius:10px;
+color:#fff;
+}
+
+.coin-select{
+position:absolute;
+top:10px;
+right:10px;
+z-index:100;
 display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
+gap:5px;
 }
 
-.container{
-width:100%;
-max-width:450px;
-background:#1e293b;
-padding:20px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 0 20px rgba(0,0,0,.4);
-}
-
-h1{
-margin-bottom:15px;
-}
-
-.score-board{
-background:#111827;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-font-size:20px;
+.coin-btn{
+padding:10px;
+border:none;
+border-radius:10px;
 font-weight:bold;
 }
 
-.bet-select{
-width:100%;
-padding:12px;
-font-size:18px;
-border:none;
-border-radius:10px;
-margin-bottom:15px;
+.fish{
+position:absolute;
+font-size:50px;
+cursor:pointer;
+animation:swim 15s linear infinite;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+@keyframes swim{
+from{
+left:-100px;
+}
+to{
+left:110%;
+}
 }
 
-.fish-btn{
-padding:25px 10px;
+.cannon{
+position:absolute;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+font-size:80px;
+}
+
+.shoot{
+position:absolute;
+bottom:30px;
+right:20px;
+width:100px;
+height:100px;
+border-radius:50%;
+background:red;
+color:white;
 border:none;
-border-radius:15px;
-font-size:22px;
+font-size:30px;
 font-weight:bold;
-color:white;
-cursor:pointer;
+box-shadow:0 0 20px red;
 }
 
-.blue{
-background:#3498db;
-}
-
-.gold{
-background:#f1c40f;
-color:black;
-}
-
-.red{
-background:#e74c3c;
-}
-
-.result{
-margin-top:15px;
-background:#111827;
-padding:15px;
-border-radius:10px;
-font-size:18px;
-min-height:60px;
-}
-
-.reset-btn{
-margin-top:15px;
-padding:12px 25px;
-background:#ef4444;
+.minus,.plus{
+width:50px;
+height:50px;
+border-radius:50%;
 border:none;
-border-radius:10px;
-color:white;
-font-size:18px;
-cursor:pointer;
+font-size:25px;
+font-weight:bold;
+}
+
+.controls{
+position:absolute;
+bottom:30px;
+left:20px;
+display:flex;
+gap:10px;
+}
+
+#msg{
+position:absolute;
+top:80px;
+left:50%;
+transform:translateX(-50%);
+color:yellow;
+font-size:28px;
+font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div id="game">
 
-<h1>🐟 ငါးပြစ်ဂိမ်း</h1>
-
-<div class="score-board">
+<div class="top">
 💰 Coins :
 <span id="coins">1000</span>
-<br><br>
-🎣 ငါးမိ :
-<span id="caught">0</span>
 </div>
 
-<select id="bet" class="bet-select">
-<option value="10">10 Coins</option>
-<option value="20">20 Coins</option>
-<option value="40">40 Coins</option>
-<option value="60">60 Coins</option>
-<option value="100">100 Coins</option>
-<option value="200">200 Coins</option>
-<option value="500">500 Coins</option>
-</select>
-
-<div class="grid">
-
-<button class="fish-btn blue"
-onclick="playFish(2,30)">
-🐟<br>
-ငါးပြာ<br>
-2x
-</button>
-
-<button class="fish-btn gold"
-onclick="playFish(3,15)">
-🐠<br>
-ငါးရွှေ<br>
-3x
-</button>
-
-<button class="fish-btn red"
-onclick="playFish(5,5)">
-🐡<br>
-ငါးဖောင်း<br>
-5x
-</button>
-
+<div class="coin-select">
+<button class="coin-btn" onclick="bet=10">10</button>
+<button class="coin-btn" onclick="bet=50">50</button>
+<button class="coin-btn" onclick="bet=100">100</button>
 </div>
 
-<div class="result" id="result">
-ငါးတစ်ကောင်ရွေးပြီး ပြစ်ပါ
+<div id="msg"></div>
+
+<div class="controls">
+<button class="minus" onclick="bet=Math.max(10,bet-10)">➖</button>
+<button class="plus" onclick="bet+=10">➕</button>
 </div>
 
-<button class="reset-btn"
-onclick="resetGame()">
-🔄 Reset
-</button>
+<div class="cannon">🔫</div>
+
+<button class="shoot" onclick="shootFish()">FIRE</button>
 
 </div>
 
 <script>
 
-let coins =
-parseInt(localStorage.getItem("coins")) || 1000;
+let coins=1000;
+let bet=10;
 
-let caught =
-parseInt(localStorage.getItem("caught")) || 0;
+function updateCoins(){
+document.getElementById("coins").innerText=coins;
+}
 
-updateUI();
+function createFish(){
 
-function updateUI(){
+const fish=document.createElement("div");
 
-document.getElementById("coins").innerText =
-coins;
+fish.className="fish";
 
-document.getElementById("caught").innerText =
-caught;
+const fishes=["🐟","🐠","🐡","🦈"];
 
-localStorage.setItem("coins",coins);
-localStorage.setItem("caught",caught);
+fish.innerHTML=fishes[Math.floor(Math.random()*fishes.length)];
+
+fish.style.top=Math.random()*80+"%";
+
+fish.onclick=function(){
+
+coins+=bet;
+
+updateCoins();
+
+document.getElementById("msg").innerHTML=
+"🎯 +"+bet+" Coins";
+
+fish.remove();
+
+};
+
+document.getElementById("game").appendChild(fish);
+
+setTimeout(()=>{
+fish.remove();
+},15000);
 
 }
 
-function playFish(multiplier,chance){
+function shootFish(){
 
-let bet =
-parseInt(document.getElementById("bet").value);
+coins-=bet;
 
-if(coins < bet){
+updateCoins();
 
-alert("Coins မလုံလောက်ပါ");
-
-return;
+document.getElementById("msg").innerHTML=
+"💥 ပစ်လိုက်ပြီ -"+bet;
 
 }
 
-coins -= bet;
+setInterval(createFish,1500);
 
-let roll =
-Math.random() * 100;
-
-if(roll < chance){
-
-let reward =
-bet * multiplier;
-
-coins += reward;
-
-caught++;
-
-document.getElementById("result").innerHTML =
-"🎉 ငါးမိသွားတယ်! +" +
-reward +
-" Coins";
-
-}else{
-
-document.getElementById("result").innerHTML =
-"❌ ငါးမမိပါ -" +
-bet +
-" Coins";
-
-}
-
-updateUI();
-
-}
-
-function resetGame(){
-
-if(confirm("1000 Coins နဲ့ ပြန်စမလား?")){
-
-coins = 1000;
-caught = 0;
-
-updateUI();
-
-document.getElementById("result").innerHTML =
-"🔄 1000 Coins နဲ့ ပြန်စပါပြီ";
-
-}
-
-}
+updateCoins();
 
 </script>
 
 </body>
-    </html>
+</html>
