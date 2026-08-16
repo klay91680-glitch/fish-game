@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="my">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,13 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:sans-serif;
 }
 
 body{
 overflow:hidden;
-background:url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200') center/cover;
 height:100vh;
-font-family:sans-serif;
+background:linear-gradient(to bottom,#001d3d,#003566,#0077b6,#00b4d8);
 }
 
 #game{
@@ -25,47 +25,51 @@ height:100vh;
 position:relative;
 }
 
-.top{
+.topbar{
 position:absolute;
 top:10px;
 left:10px;
+background:rgba(0,0,0,.5);
+padding:10px 15px;
+border-radius:15px;
+color:white;
+font-size:20px;
 z-index:100;
-background:rgba(0,0,0,.6);
-padding:10px;
-border-radius:10px;
-color:#fff;
 }
 
-.coin-select{
+.betbox{
 position:absolute;
 top:10px;
 right:10px;
-z-index:100;
 display:flex;
 gap:5px;
+z-index:100;
 }
 
-.coin-btn{
-padding:10px;
+.betbtn{
+padding:10px 15px;
 border:none;
 border-radius:10px;
 font-weight:bold;
+}
+
+.message{
+position:absolute;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+color:yellow;
+font-size:24px;
+font-weight:bold;
+z-index:100;
 }
 
 .fish{
 position:absolute;
 font-size:50px;
 cursor:pointer;
-animation:swim 15s linear infinite;
-}
-
-@keyframes swim{
-from{
-left:-100px;
-}
-to{
-left:110%;
-}
+user-select:none;
+z-index:5;
 }
 
 .cannon{
@@ -74,48 +78,49 @@ bottom:20px;
 left:50%;
 transform:translateX(-50%);
 font-size:80px;
-}
-
-.shoot{
-position:absolute;
-bottom:30px;
-right:20px;
-width:100px;
-height:100px;
-border-radius:50%;
-background:red;
-color:white;
-border:none;
-font-size:30px;
-font-weight:bold;
-box-shadow:0 0 20px red;
-}
-
-.minus,.plus{
-width:50px;
-height:50px;
-border-radius:50%;
-border:none;
-font-size:25px;
-font-weight:bold;
+z-index:20;
 }
 
 .controls{
 position:absolute;
-bottom:30px;
+bottom:35px;
 left:20px;
 display:flex;
 gap:10px;
+z-index:20;
 }
 
-#msg{
-position:absolute;
-top:80px;
-left:50%;
-transform:translateX(-50%);
-color:yellow;
+.ctrlbtn{
+width:60px;
+height:60px;
+border:none;
+border-radius:50%;
 font-size:28px;
 font-weight:bold;
+}
+
+.shoot{
+position:absolute;
+bottom:20px;
+right:20px;
+width:100px;
+height:100px;
+border:none;
+border-radius:50%;
+background:red;
+color:white;
+font-size:25px;
+font-weight:bold;
+box-shadow:0 0 20px red;
+z-index:20;
+}
+
+.sea{
+position:absolute;
+bottom:0;
+width:100%;
+height:120px;
+background:rgba(0,100,0,.25);
 }
 </style>
 </head>
@@ -124,81 +129,108 @@ font-weight:bold;
 
 <div id="game">
 
-<div class="top">
-💰 Coins :
-<span id="coins">1000</span>
+<div class="topbar">
+💰 Coins : <span id="coins">1000</span>
 </div>
 
-<div class="coin-select">
-<button class="coin-btn" onclick="bet=10">10</button>
-<button class="coin-btn" onclick="bet=50">50</button>
-<button class="coin-btn" onclick="bet=100">100</button>
+<div class="betbox">
+<button class="betbtn" onclick="bet=10">10</button>
+<button class="betbtn" onclick="bet=50">50</button>
+<button class="betbtn" onclick="bet=100">100</button>
 </div>
 
-<div id="msg"></div>
+<div class="message" id="msg">
+🎯 ငါးကိုနှိပ်ပြီး ဖမ်းပါ
+</div>
 
 <div class="controls">
-<button class="minus" onclick="bet=Math.max(10,bet-10)">➖</button>
-<button class="plus" onclick="bet+=10">➕</button>
+<button class="ctrlbtn" onclick="bet=Math.max(10,bet-10)">➖</button>
+<button class="ctrlbtn" onclick="bet+=10">➕</button>
 </div>
 
 <div class="cannon">🔫</div>
 
-<button class="shoot" onclick="shootFish()">FIRE</button>
+<button class="shoot" onclick="shootFish()">
+FIRE
+</button>
+
+<div class="sea"></div>
 
 </div>
 
 <script>
 
-let coins=1000;
-let bet=10;
+let coins = 1000;
+let bet = 10;
 
 function updateCoins(){
-document.getElementById("coins").innerText=coins;
-}
-
-function createFish(){
-
-const fish=document.createElement("div");
-
-fish.className="fish";
-
-const fishes=["🐟","🐠","🐡","🦈"];
-
-fish.innerHTML=fishes[Math.floor(Math.random()*fishes.length)];
-
-fish.style.top=Math.random()*80+"%";
-
-fish.onclick=function(){
-
-coins+=bet;
-
-updateCoins();
-
-document.getElementById("msg").innerHTML=
-"🎯 +"+bet+" Coins";
-
-fish.remove();
-
-};
-
-document.getElementById("game").appendChild(fish);
-
-setTimeout(()=>{
-fish.remove();
-},15000);
-
+document.getElementById("coins").innerText = coins;
 }
 
 function shootFish(){
 
-coins-=bet;
+coins -= bet;
+
+if(coins < 0){
+coins = 0;
+}
 
 updateCoins();
 
-document.getElementById("msg").innerHTML=
-"💥 ပစ်လိုက်ပြီ -"+bet;
+document.getElementById("msg").innerHTML =
+"💥 ပစ်လိုက်ပြီ - " + bet + " Coins";
+}
 
+function createFish(){
+
+const fish = document.createElement("div");
+
+fish.className = "fish";
+
+const list = ["🐟","🐠","🐡","🦈"];
+
+fish.innerHTML =
+list[Math.floor(Math.random()*list.length)];
+
+fish.style.top =
+Math.random()*75 + "%";
+
+fish.style.left = "-80px";
+
+document.getElementById("game").appendChild(fish);
+
+let pos = -80;
+
+const move = setInterval(()=>{
+
+pos += 3;
+
+fish.style.left = pos + "px";
+
+if(pos > window.innerWidth){
+
+clearInterval(move);
+
+fish.remove();
+
+}
+
+},30);
+
+fish.onclick = function(){
+
+coins += bet * 2;
+
+updateCoins();
+
+document.getElementById("msg").innerHTML =
+"🎯 ထိမှန် + " + (bet*2) + " Coins";
+
+fish.remove();
+
+clearInterval(move);
+
+};
 }
 
 setInterval(createFish,1500);
