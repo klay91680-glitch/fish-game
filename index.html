@@ -3,41 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fish Game</title>
+
+<title>Fish Hunter</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:sans-serif;
 }
 
-body{
+html,body{
+width:100%;
+height:100%;
 overflow:hidden;
-background:#001b3d;
-font-family:sans-serif;
+background:black;
+}
+
+#rotate{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:white;
+display:none;
+justify-content:center;
+align-items:center;
+font-size:28px;
+z-index:9999;
 }
 
 #game{
 width:100vw;
 height:100vh;
 position:relative;
-background:
-linear-gradient(#003c75,#00a7d8);
 overflow:hidden;
+background:
+linear-gradient(to bottom,#001a4d,#0088cc);
 }
 
-.coin{
+/* Coins */
+
+#coins{
 position:absolute;
 top:10px;
 left:10px;
+background:rgba(0,0,0,.5);
+padding:8px 15px;
+border-radius:10px;
 color:gold;
-font-size:20px;
 font-weight:bold;
 z-index:100;
 }
 
-.power{
+/* Power */
+
+#power{
 position:absolute;
 top:10px;
 left:50%;
@@ -45,75 +70,94 @@ transform:translateX(-50%);
 z-index:100;
 }
 
-.power button{
-padding:6px 12px;
+#power button{
+padding:8px 15px;
+margin:2px;
 border:none;
 border-radius:8px;
-margin:2px;
+font-weight:bold;
 }
 
-.cannon{
+/* Cannon */
+
+#cannon{
 position:absolute;
-bottom:20px;
+bottom:15px;
 left:50%;
 transform:translateX(-50%);
 font-size:70px;
 z-index:50;
 }
 
+/* Minus Plus */
+
 .minus{
 position:absolute;
-bottom:40px;
-left:30%;
+bottom:30px;
+left:35%;
 width:60px;
 height:60px;
-border-radius:50%;
 border:none;
+border-radius:50%;
 font-size:30px;
 }
 
 .plus{
 position:absolute;
-bottom:40px;
-right:30%;
+bottom:30px;
+right:35%;
 width:60px;
 height:60px;
-border-radius:50%;
 border:none;
+border-radius:50%;
 font-size:30px;
 }
+
+/* Side Buttons */
 
 .auto{
 position:absolute;
 left:10px;
 bottom:120px;
-padding:15px;
 background:red;
 color:white;
 border:none;
-border-radius:15px;
+padding:15px;
+border-radius:12px;
 }
 
 .gift{
 position:absolute;
 right:10px;
 bottom:120px;
-padding:15px;
 background:purple;
 color:white;
 border:none;
-border-radius:15px;
+padding:15px;
+border-radius:12px;
 }
+
+/* Fish */
 
 .fish{
 position:absolute;
-font-size:45px;
+font-size:50px;
 cursor:pointer;
 user-select:none;
 }
 
 .big{
-font-size:80px;
+font-size:90px;
+}
+
+.hit{
+animation:pop .3s linear;
+}
+
+@keyframes pop{
+0%{transform:scale(1);}
+50%{transform:scale(1.5);}
+100%{transform:scale(0);}
 }
 
 </style>
@@ -121,28 +165,31 @@ font-size:80px;
 
 <body>
 
-<div id="game">
-
-<div class="coin">
-💰 Coins :
-<span id="coin">1000</span>
+<div id="rotate">
+📱 ဖုန်းကို အစောင်းလှည့်ပြီး ကစားပါ
 </div>
 
-<div class="power">
+<div id="game">
+
+<div id="coins">
+💰 Coins : <span id="coinText">1000</span>
+</div>
+
+<div id="power">
 <button>10</button>
 <button>50</button>
 <button>100</button>
 </div>
 
 <button class="auto">AUTO</button>
+
 <button class="gift">🎁</button>
 
 <button class="minus">−</button>
-<button class="plus">+</button>
 
-<div class="cannon">
-🔫
-</div>
+<div id="cannon">🔫</div>
+
+<button class="plus">+</button>
 
 </div>
 
@@ -150,9 +197,35 @@ font-size:80px;
 
 let coins=1000;
 
-function updateCoin(){
-document.getElementById("coin").innerText=coins;
+function updateCoins(){
+document.getElementById("coinText").innerHTML=coins;
 }
+
+/* Orientation */
+
+function checkOrientation(){
+
+if(window.innerHeight > window.innerWidth){
+
+document.getElementById("rotate").style.display="flex";
+
+document.getElementById("game").style.display="none";
+
+}else{
+
+document.getElementById("rotate").style.display="none";
+
+document.getElementById("game").style.display="block";
+
+}
+
+}
+
+window.addEventListener("resize",checkOrientation);
+
+checkOrientation();
+
+/* Fish Create */
 
 function createFish(){
 
@@ -171,22 +244,23 @@ fish.innerHTML=
 types[Math.floor(Math.random()*types.length)];
 
 if(Math.random()<0.1){
+
 fish.innerHTML="🐋";
+
 fish.classList.add("big");
+
 }
 
 fish.style.left="-100px";
-fish.style.top=
-Math.random()*70+"vh";
 
-document.getElementById("game")
-.appendChild(fish);
+fish.style.top=
+Math.random()*(window.innerHeight-250)+"px";
+
+document.getElementById("game").appendChild(fish);
 
 let x=-100;
 
-let speed=
-2+
-Math.random()*3;
+let speed=2+Math.random()*4;
 
 let move=setInterval(()=>{
 
@@ -208,19 +282,21 @@ fish.onclick=function(){
 
 coins+=20;
 
-updateCoin();
+updateCoins();
+
+fish.classList.add("hit");
 
 fish.innerHTML="💥";
 
 setTimeout(()=>{
 fish.remove();
-},200);
+},300);
 
 };
 
 }
 
-setInterval(createFish,800);
+setInterval(createFish,700);
 
 </script>
 
