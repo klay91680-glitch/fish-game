@@ -394,7 +394,7 @@ function shoot() {
         const fish = document.getElementById(id);
         const rect = fish.getBoundingClientRect();
 
-        const centerX = window.innerWidth / 2;
+       const centerX = Math.random() * window.innerWidth;
         const cannonY = window.innerHeight - 120;
 
         if (
