@@ -280,18 +280,32 @@ fishIds.forEach(id=>{
     const fish = document.getElementById(id);
 
     fish.addEventListener("click",function(){
+if(coins < bet){
+    document.getElementById("message").innerText =
+    "❌ Coins မလုံလောက်ပါ";
+    return;
+}
 
-        let reward = bet * 2;
+coins -= bet;
+updateCoins();
 
-        if(id==="fish4"){
-            reward = bet * 5;
-        }
+let hit = Math.random() < 0.5;
 
-        if(id==="fish5"){
-            reward = bet * 10;
-        }
+if(!hit){
+    document.getElementById("message").innerText =
+    "💨 Miss!";
+    return;
+}
 
-        coins += reward;
+let reward = 0;
+
+if(id==="fish1") reward = bet * 2;
+if(id==="fish2") reward = bet * 3;
+if(id==="fish3") reward = bet * 4;
+if(id==="fish4") reward = bet * 5;
+if(id==="fish5") reward = bet * 10;
+
+coins += reward;;
 
         updateCoins();
 
@@ -322,6 +336,16 @@ fishIds.forEach(id=>{
 
 document.getElementById("giftBtn").addEventListener("click",function(){
 
+  let giftReady = true;
+
+document.getElementById("giftBtn").addEventListener("click", function(){
+
+    if(!giftReady){
+        document.getElementById("message").innerText =
+        "⏳ Wait 1 minute!";
+        return;
+    }
+
     let gift = 100;
 
     coins += gift;
@@ -330,6 +354,14 @@ document.getElementById("giftBtn").addEventListener("click",function(){
 
     document.getElementById("message").innerText =
     "🎁 Gift +" + gift;
+
+    giftReady = false;
+
+    setTimeout(()=>{
+        giftReady = true;
+    },60000);
+
+});
 
 });
 
