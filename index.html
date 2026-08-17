@@ -21,13 +21,19 @@ font-family:Arial,sans-serif;
 }
 
 #game{
-position:relative;
-width:100vw;
-height:100vh;
+position:fixed;
+
+width:100vh;
+height:100vw;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%) rotate(90deg);
+
 overflow:hidden;
 
-background:
-linear-gradient(
+background:linear-gradient(
 to bottom,
 #002b5c 0%,
 #005e9e 50%,
