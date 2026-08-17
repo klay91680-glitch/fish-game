@@ -203,12 +203,15 @@ z-index:200;
 </div>
 
 <script>
-  let coins = 1000;
+let coins = localStorage.getItem("coins")
+ ? parseInt(localStorage.getItem("coins"))
+ : 1000;
 let bet = 10;
 
 function updateCoins(){
     document.getElementById("coinValue").innerText = coins;
-}
+    localStorage.setItem("coins", coins);
+  }
 
 function setBet(value){
     bet = value;
