@@ -103,6 +103,8 @@ left:50%;
 transform:translateX(-50%);
 font-size:60px;
 z-index:100;
+  touch-action:none;
+user-select:none;
 }
 
 /* Controls */
@@ -415,17 +417,17 @@ const cannon = document.getElementById("cannon");
 cannon.addEventListener("click", shoot);
 
 let autoShoot;
+let autoShoot;
 
-cannon.addEventListener("touchstart", (e) => {
-    e.preventDefault();
+cannon.addEventListener("pointerdown", () => {
     autoShoot = setInterval(shoot, 200);
 });
 
-cannon.addEventListener("touchend", () => {
+cannon.addEventListener("pointerup", () => {
     clearInterval(autoShoot);
 });
 
-cannon.addEventListener("touchcancel", () => {
+cannon.addEventListener("pointerleave", () => {
     clearInterval(autoShoot);
 });
   </script>
