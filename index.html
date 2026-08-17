@@ -416,15 +416,16 @@ cannon.addEventListener("click", shoot);
 
 let autoShoot;
 
-cannon.addEventListener("touchstart", () => {
+cannon.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     autoShoot = setInterval(shoot, 200);
 });
 
 cannon.addEventListener("touchend", () => {
     clearInterval(autoShoot);
 });
-document.getElementById("message").innerText =
-"🐟 Fish Shooting Game Ready!";
-  </script>
-  </body>
+
+cannon.addEventListener("touchcancel", () => {
+    clearInterval(autoShoot);
+});
 </html>
