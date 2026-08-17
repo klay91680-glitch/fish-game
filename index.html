@@ -398,12 +398,10 @@ function shoot() {
         }
     });
 
-    
-     if (!hitFish) {;
-     }
-        document.getElementById("message").innerText = "💨 Miss!";
-        return;
-    }
+    if (!hitFish) {
+    document.getElementById("message").innerText = "💨 Miss!";
+    return;
+  }
 if (!hitFish.hits) {
     hitFish.hits = 0;
     hitFish.need = Math.floor(Math.random() * 7) + 3;
@@ -424,7 +422,8 @@ updateCoins();
 
 document.getElementById("message").innerText =
 "🎉 +" + reward;
-
+hitFish.hits = 0;
+hitFish.need = Math.floor(Math.random() * 7) + 3;
 
 const cannon = document.getElementById("cannon");
 
