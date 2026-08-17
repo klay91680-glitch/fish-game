@@ -1,460 +1,1219 @@
 <!DOCTYPE html>
-<html>
+<html lang="my">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <meta name="theme-color" content="#001b3d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-
-<title>Fish Shooting Game</title><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#001b3d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 
 <title>Fish Shooting Game</title>
 
 <script>
-window.addEventListener("load", () => {
-  if (screen.orientation && screen.orientation.lock) {
-    screen.orientation.lock("landscape").catch(() => {});
-  }
+window.addEventListener("load", async () => {
+    try {
+        if(screen.orientation &&
+           screen.orientation.lock){
+            await screen.orientation.lock("landscape");
+        }
+    } catch(e) {}
 });
 </script>
 
-</head>
-
 <style>
-  *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html,body{
-width:100%;
-height:100%;
-overflow:hidden;
-background:#001b3d;
-font-family:Arial,sans-serif;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#001b3d;
+    font-family:Arial,sans-serif;
+    touch-action:none;
+    user-select:none;
 }
 
 #game{
-position:relative;
-width:100vw;
-height:100vh;
-overflow:hidden;
+    position:absolute;
 
-background:linear-gradient(
-to bottom,
-#002b5c 0%,
-#005e9e 50%,
-#00a8d8 100%
-);
+    width:100vw;
+    height:56.25vw;
+
+    max-height:100vh;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        to bottom,
+        #002b5c 0%,
+        #005e9e 50%,
+        #00a8d8 100%
+    );
 }
 
-/* Top Bar */
-#topBar{
-position:absolute;
-top:10px;
-left:10px;
-right:10px;
-z-index:100;
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* =========================
+   TOP
+========================= */
+
+#topBar{
+    position:absolute;
+
+    top:10px;
+    left:10px;
+    right:10px;
+
+    z-index:300;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.info{
+    background:rgba(0,0,0,.45);
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:14px;
+
+    font-size:clamp(14px,3vw,21px);
+    font-weight:bold;
 }
 
 #coins{
-background:rgba(0,0,0,.4);
-color:gold;
-padding:8px 15px;
-border-radius:15px;
-font-size:20px;
-font-weight:bold;
+    color:gold;
 }
 
-#betBox button{
-border:none;
-padding:8px 15px;
-margin-left:5px;
-border-radius:10px;
-font-size:18px;
+
+/* =========================
+   MESSAGE
+========================= */
+
+#message{
+    position:absolute;
+
+    top:55px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:#fff45c;
+
+    font-size:clamp(16px,4vw,26px);
+
+    font-weight:bold;
+
+    z-index:400;
+
+    white-space:nowrap;
+
+    pointer-events:none;
 }
 
-/* Fish */
+
+/* =========================
+   FISH
+========================= */
+
 .fish{
-position:absolute;
-font-size:42px;
-cursor:pointer;
-user-select:none;
+    position:absolute;
+
+    font-size:clamp(45px,10vw,85px);
+
+    z-index:30;
+
+    pointer-events:none;
 }
 
-/* Cannon */
+
+/* =========================
+   CANNON
+========================= */
+
 #cannon{
-position:absolute;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-font-size:60px;
-z-index:100;
-  touch-action:none;
-user-select:none;
+    position:absolute;
+
+    left:50%;
+    bottom:25px;
+
+    width:130px;
+    height:130px;
+
+    transform:translateX(-50%);
+
+    z-index:200;
+
+    touch-action:none;
 }
 
-/* Controls */
+
+/* BARREL */
+
+#barrel{
+    position:absolute;
+
+    left:50%;
+    top:58%;
+
+    width:30px;
+    height:90px;
+
+    transform:
+        translate(-50%,-100%)
+        rotate(0deg);
+
+    transform-origin:50% 100%;
+
+    background:
+    linear-gradient(
+        to right,
+        #063a5e,
+        #55e5ff,
+        #0876a8
+    );
+
+    border:4px solid #052e4d;
+
+    border-radius:
+        15px 15px 7px 7px;
+
+    box-shadow:
+        0 0 18px
+        rgba(0,220,255,.8);
+}
+
+
+/* MUZZLE */
+
+#muzzle{
+    position:absolute;
+
+    left:50%;
+    top:-8px;
+
+    width:42px;
+    height:24px;
+
+    transform:translateX(-50%);
+
+    background:#062d49;
+
+    border:3px solid #55ddff;
+
+    border-radius:9px;
+}
+
+
+/* BASE */
+
+#cannonBase{
+    position:absolute;
+
+    left:50%;
+    bottom:0;
+
+    width:105px;
+    height:52px;
+
+    transform:translateX(-50%);
+
+    background:
+    linear-gradient(
+        #35d8ff,
+        #0871a8
+    );
+
+    border:5px solid #063c60;
+
+    border-radius:
+        28px 28px 12px 12px;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,220,255,.7);
+}
+
+
+/* =========================
+   BET BUTTONS
+   CANNON ဘေး
+========================= */
+
+#shotBox{
+    position:absolute;
+
+    left:calc(50% - 160px);
+    bottom:10px;
+
+    z-index:320;
+
+    display:flex;
+    flex-direction:row;   /* အလျားလိုက် */
+
+    gap:5px;
+
+    padding:5px;
+
+    background:rgba(0,0,0,.35);
+    border-radius:12px;
+}
+
+.shotBtn{
+    min-width:55px;
+
+    padding:8px 10px;
+
+    border:2px solid #777;
+    border-radius:9px;
+
+    background:rgba(20,20,20,.85);
+    color:white;
+
+    font-size:10px;
+    font-weight:bold;
+}
+
+.shotBtn.active{
+    background:#ffd21c;
+    color:#111;
+
+    border-color:white;
+
+    box-shadow:
+        0 0 12px
+        rgba(255,220,0,.9);
+}
+
+
+
+/* =========================
+   BULLET
+========================= */
+
+.bullet{
+    position:absolute;
+
+    width:10px;
+    height:24px;
+
+    border-radius:12px;
+
+    background:#fff36b;
+
+    box-shadow:
+        0 0 10px #fff,
+        0 0 20px #ffe600;
+
+    z-index:150;
+
+    pointer-events:none;
+}
+
+
+/* =========================
+   HIT
+========================= */
+
+.hitEffect{
+    position:absolute;
+
+    z-index:500;
+
+    font-size:35px;
+
+    pointer-events:none;
+
+    animation:hit .3s linear;
+}
+
+@keyframes hit{
+
+    from{
+        transform:scale(.5);
+        opacity:1;
+    }
+
+    to{
+        transform:scale(1.5);
+        opacity:0;
+    }
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
 #controls{
-position:absolute;
-bottom:20px;
-left:20px;
-right:20px;
+    position:absolute;
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+    left:15px;
+    right:15px;
 
-z-index:100;
+    bottom:18px;
+
+    z-index:250;
+
+    display:flex;
+    justify-content:space-between;
+
+    pointer-events:none;
 }
 
 .controlBtn{
-border:none;
-padding:15px 20px;
-border-radius:15px;
-font-size:20px;
-font-weight:bold;
+    border:none;
+
+    padding:12px 18px;
+
+    border-radius:15px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    pointer-events:auto;
 }
 
 #autoBtn{
-background:red;
-color:white;
+    background:red;
+    color:white;
 }
 
 #giftBtn{
-background:purple;
-color:white;
+    background:purple;
+    color:white;
 }
 
-/* Result Text */
-#message{
-position:absolute;
-top:60px;
-left:50%;
-transform:translateX(-50%);
-color:yellow;
-font-size:24px;
-font-weight:bold;
-z-index:200;
-  } 
-  .bullet{
-    position:absolute;
-    width:8px;
-    height:16px;
-    background:yellow;
-    border-radius:10px;
-    z-index:150;
-  } 
+
+/* =========================
+   SMALL HEIGHT
+========================= */
+
+@media(max-height:500px){
+
+    #cannon{
+        bottom:15px;
+
+        transform:
+            translateX(-50%)
+            scale(.82);
+    }
+
+    #shotBox{
+        left:calc(50% + 60px);
+        bottom:25px;
+
+        transform:scale(.9);
+        transform-origin:bottom left;
+    }
+
+    .fish{
+        font-size:55px;
+    }
+
+}
+
 </style>
 </head>
+
+
 <body>
 
 <div id="game">
 
-    <!-- Top Bar -->
-    <div id="topBar">
 
-        <div id="coins">
-            💰 Coins :
-            <span id="coinValue">1000</span>
-        </div>
+<!-- TOP -->
 
-        <div id="betBox">
-            <button onclick="setBet(10)">10</button>
-            <button onclick="setBet(50)">50</button>
-            <button onclick="setBet(100)">100</button>
-        </div>
+<div id="topBar">
 
+    <div class="info" id="coins">
+        💰 Coins :
+        <span id="coinValue">1000</span>
     </div>
 
-    <!-- Message -->
-    <div id="message"></div>
-
-    <!-- Fish Area -->
-    <div id="fishArea">
-
-        <div class="fish" id="fish1">🐠</div>
-        <div class="fish" id="fish2">🐟</div>
-        <div class="fish" id="fish3">🐡</div>
-        <div class="fish" id="fish4">🦈</div>
-        <div class="fish" id="fish5">🐋</div>
-
-    </div>
-
-    <!-- Controls -->
-    <div id="controls">
-
-        <button class="controlBtn" id="autoBtn">
-            AUTO
-        </button>
-
-        <div id="cannon">
-            🔫
-        </div>
-
-        <button class="controlBtn" id="giftBtn">
-            🎁
-        </button>
-
+    <div class="info">
+        👤 ID :
+        <span id="accountId"></span>
     </div>
 
 </div>
 
+
+<!-- MESSAGE -->
+
+<div id="message"></div>
+
+
+<!-- FISH -->
+
+<div class="fish" id="fish1">🐠</div>
+<div class="fish" id="fish2">🐟</div>
+<div class="fish" id="fish3">🐡</div>
+<div class="fish" id="fish4">🦈</div>
+<div class="fish" id="fish5">🐋</div>
+
+
+<!-- CONTROLS -->
+
+<div id="controls">
+
+    <button
+        class="controlBtn"
+        id="autoBtn">
+        AUTO
+    </button>
+
+    <button
+        class="controlBtn"
+        id="giftBtn">
+        🎁
+    </button>
+
+</div>
+
+
+<!-- CANNON -->
+
+<div id="cannon">
+
+    <div id="barrel">
+        <div id="muzzle"></div>
+    </div>
+
+    <div id="cannonBase"></div>
+
+</div>
+
+
+<!-- BET / COIN SELECT -->
+
+<div id="shotBox">
+
+    <button
+        class="shotBtn active"
+        data-bet="10"
+        onclick="selectBet(10)">
+        10
+    </button>
+
+    <button
+        class="shotBtn"
+        data-bet="20"
+        onclick="selectBet(20)">
+        20
+    </button>
+
+    <button
+        class="shotBtn"
+        data-bet="50"
+        onclick="selectBet(50)">
+        50
+    </button>
+
+    <button
+        class="shotBtn"
+        data-bet="100"
+        onclick="selectBet(100)">
+        100
+    </button>
+
+    <button
+        class="shotBtn"
+        data-bet="500"
+        onclick="selectBet(500)">
+        500
+    </button>
+
+</div>
+
+
+</div>
+
+
 <script>
-let coins = localStorage.getItem("coins")
- ? parseInt(localStorage.getItem("coins"))
- : 1000;
-function updateCoins(){
-    document.getElementById("coinValue").innerText = coins;
-    localStorage.setItem("coins", coins);
+
+/* =========================
+   ACCOUNT ID
+========================= */
+
+let accountId =
+localStorage.getItem(
+    "fishAccountId"
+);
+
+if(!accountId){
+
+    accountId =
+        "USER" +
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
+
+    localStorage.setItem(
+        "fishAccountId",
+        accountId
+    );
 }
 
-let bet = 10;
-  
+document.getElementById(
+    "accountId"
+).innerText =
+    accountId;
 
-function setBet(value){
-    bet = value;
 
-    document.getElementById("message").innerText =
-    "🎯 Bet : " + bet;
+/* =========================
+   COINS
+========================= */
+
+let coins =
+Number(
+    localStorage.getItem(
+        "fishCoins"
+    ) || 1000
+);
+
+function updateCoins(){
+
+    document.getElementById(
+        "coinValue"
+    ).innerText =
+        coins;
+
+    localStorage.setItem(
+        "fishCoins",
+        coins
+    );
 }
 
 updateCoins();
-  const fishIds = ["fish1","fish2","fish3","fish4","fish5"];
 
-function startFish(fishId){
 
-    const fish = document.getElementById(fishId);
+/* =========================
+   BET
+========================= */
 
-    let y = Math.random() * (window.innerHeight - 200);
+let bet = 10;
 
-    fish.style.top = y + "px";
+function selectBet(value){
 
-    let leftToRight = Math.random() > 0.5;
+    bet = value;
 
-    let x = leftToRight ? -100 : window.innerWidth + 100;
+    document
+        .querySelectorAll(
+            ".shotBtn"
+        )
+        .forEach(btn => {
 
-    fish.style.left = x + "px";
+            btn.classList.toggle(
+                "active",
+                Number(
+                    btn.dataset.bet
+                ) === value
+            );
 
-    if(leftToRight){
-        fish.style.transform = "scaleX(1)";
-    }else{
-        fish.style.transform = "scaleX(-1)";
-    }
+        });
 
-    let speed = 2 + Math.random() * 3;
+    document.getElementById(
+        "message"
+    ).innerText =
+        "🎯 Coin : " + value;
+}
 
-    setInterval(()=>{
 
-        if(leftToRight){
+/* =========================
+   FISH
+========================= */
+
+const fishIds = [
+    "fish1",
+    "fish2",
+    "fish3",
+    "fish4",
+    "fish5"
+];
+
+const fishEmoji = {
+
+    fish1:"🐠",
+    fish2:"🐟",
+    fish3:"🐡",
+    fish4:"🦈",
+    fish5:"🐋"
+
+};
+
+const multiplier = {
+
+    fish1:2,
+    fish2:3,
+    fish3:4,
+    fish4:5,
+    fish5:10
+
+};
+
+
+function startFish(id){
+
+    const fish =
+        document.getElementById(id);
+
+    let y =
+        15 +
+        Math.random() * 65;
+
+    let direction =
+        Math.random() > .5;
+
+    let x =
+        direction
+        ? -15
+        : 115;
+
+    let speed =
+        .25 +
+        Math.random() * .35;
+
+    fish.style.top =
+        y + "%";
+
+    fish.style.left =
+        x + "%";
+
+    fish.style.transform =
+        direction
+        ? "scaleX(1)"
+        : "scaleX(-1)";
+
+
+    setInterval(() => {
+
+        if(direction){
+
             x += speed;
+
+            if(x > 115){
+
+                x = -15;
+
+                y =
+                    15 +
+                    Math.random() * 65;
+
+                fish.style.top =
+                    y + "%";
+            }
+
         }else{
+
             x -= speed;
+
+            if(x < -20){
+
+                x = 115;
+
+                y =
+                    15 +
+                    Math.random() * 65;
+
+                fish.style.top =
+                    y + "%";
+            }
+
         }
 
-        fish.style.left = x + "px";
-
-        if(x > window.innerWidth + 150){
-            x = -100;
-            fish.style.top =
-            Math.random() * (window.innerHeight - 200) + "px";
-        }
-
-        if(x < -150){
-            x = window.innerWidth + 100;
-            fish.style.top =
-            Math.random() * (window.innerHeight - 200) + "px";
-        }
+        fish.style.left =
+            x + "%";
 
     },30);
 
 }
 
-fishIds.forEach(id=>{
-    startFish(id);
-});
-  fishIds.forEach(id=>{
 
-    const fish = document.getElementById(id);
+fishIds.forEach(
+    startFish
+);
 
-    fish.addEventListener("click",function(){
-if(coins < bet){
-    document.getElementById("message").innerText =
-    "❌ Coins မလုံလောက်ပါ";
-    return;
+
+/* =========================
+   CANNON AIM
+========================= */
+
+const cannon =
+    document.getElementById(
+        "cannon"
+    );
+
+const barrel =
+    document.getElementById(
+        "barrel"
+    );
+
+let cannonAngle = 0;
+
+
+function aimCannon(x,y){
+
+    const rect =
+        cannon.getBoundingClientRect();
+
+    const centerX =
+        rect.left +
+        rect.width / 2;
+
+    const centerY =
+        rect.top +
+        rect.height / 2;
+
+    const dx =
+        x - centerX;
+
+    const dy =
+        y - centerY;
+
+    cannonAngle =
+        Math.atan2(
+            dx,
+            -dy
+        )
+        * 180 /
+        Math.PI;
+
+    barrel.style.transform =
+        `translate(-50%,-100%)
+         rotate(${cannonAngle}deg)`;
 }
 
-coins -= bet;
-updateCoins();
 
-let hit = Math.random() < 0.5;
+/* =========================
+   TOUCH AIM + SHOOT
+========================= */
 
-if(!hit){
-    document.getElementById("message").innerText =
-    "💨 Miss!";
-    return;
+cannon.addEventListener(
+    "pointerdown",
+    function(e){
+
+        cannon.setPointerCapture(
+            e.pointerId
+        );
+
+        aimCannon(
+            e.clientX,
+            e.clientY
+        );
+
+        shoot();
+
+    }
+);
+
+
+cannon.addEventListener(
+    "pointermove",
+    function(e){
+
+        if(e.buttons){
+
+            aimCannon(
+                e.clientX,
+                e.clientY
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   SHOOT
+========================= */
+
+function shoot(){
+
+    if(coins < bet){
+
+        document.getElementById(
+            "message"
+        ).innerText =
+            "❌ Coins မလုံလောက်ပါ";
+
+        return;
+    }
+
+
+    const rect =
+        cannon.getBoundingClientRect();
+
+    let x =
+        rect.left +
+        rect.width / 2;
+
+    let y =
+        rect.top +
+        rect.height / 2;
+
+
+    const angle =
+        cannonAngle *
+        Math.PI /
+        180;
+
+    const speed = 15;
+
+
+    const bullet =
+        document.createElement(
+            "div"
+        );
+
+    bullet.className =
+        "bullet";
+
+
+    bullet.style.left =
+        (x - 5) + "px";
+
+    bullet.style.top =
+        (y - 12) + "px";
+
+
+    document
+        .getElementById("game")
+        .appendChild(
+            bullet
+        );
+
+
+    function moveBullet(){
+
+        x +=
+            Math.sin(angle)
+            * speed;
+
+        y -=
+            Math.cos(angle)
+            * speed;
+
+
+        bullet.style.left =
+            (x - 5) + "px";
+
+        bullet.style.top =
+            (y - 12) + "px";
+
+
+        let hitFish = null;
+
+
+        fishIds.forEach(
+            function(id){
+
+                if(hitFish)
+                    return;
+
+                const fish =
+                    document.getElementById(
+                        id
+                    );
+
+                const r =
+                    fish.getBoundingClientRect();
+
+
+                if(
+
+                    x >= r.left &&
+                    x <= r.right &&
+                    y >= r.top &&
+                    y <= r.bottom
+
+                ){
+
+                    hitFish =
+                        fish;
+                }
+
+            }
+        );
+
+
+        /* =====================
+           HIT
+        ===================== */
+
+        if(hitFish){
+
+            bullet.remove();
+
+
+            /*
+              ရွေးထားတဲ့ Coin ကို
+              ငါးထိမှသာ ဖြတ်
+            */
+
+            coins -= bet;
+
+
+            /*
+              ငါးအလိုက် Reward
+            */
+
+            const reward =
+                bet *
+                multiplier[
+                    hitFish.id
+                ];
+
+
+            coins += reward;
+
+            updateCoins();
+
+
+            document.getElementById(
+                "message"
+            ).innerText =
+                "🎯 HIT +" +
+                reward +
+                " Coins";
+
+
+            /* HIT EFFECT */
+
+            const effect =
+                document.createElement(
+                    "div"
+                );
+
+            effect.className =
+                "hitEffect";
+
+            effect.innerText =
+                "💥";
+
+            effect.style.left =
+                x + "px";
+
+            effect.style.top =
+                y + "px";
+
+
+            document
+                .getElementById(
+                    "game"
+                )
+                .appendChild(
+                    effect
+                );
+
+
+            setTimeout(
+                () => effect.remove(),
+                300
+            );
+
+
+            const old =
+                fishEmoji[
+                    hitFish.id
+                ];
+
+
+            hitFish.innerText =
+                "💥";
+
+
+            setTimeout(
+                () => {
+
+                    hitFish.innerText =
+                        old;
+
+                },
+                300
+            );
+
+
+            return;
+        }
+
+
+        /* =====================
+           MISS
+        ===================== */
+
+        if(
+
+            x < -60 ||
+            x > window.innerWidth + 60 ||
+            y < -60 ||
+            y > window.innerHeight + 60
+
+        ){
+
+            bullet.remove();
+
+            document.getElementById(
+                "message"
+            ).innerText =
+                "💨 Miss!";
+
+            return;
+        }
+
+
+        requestAnimationFrame(
+            moveBullet
+        );
+
+    }
+
+
+    requestAnimationFrame(
+        moveBullet
+    );
 }
 
-let reward = 0;
 
-if(id==="fish1") reward = bet * 2;
-if(id==="fish2") reward = bet * 3;
-if(id==="fish3") reward = bet * 4;
-if(id==="fish4") reward = bet * 5;
-if(id==="fish5") reward = bet * 10;
+/* =========================
+   AUTO
+========================= */
 
-coins += reward;;
+let autoMode = false;
+let autoTimer = null;
+
+
+document.getElementById(
+    "autoBtn"
+).addEventListener(
+    "click",
+    function(){
+
+        autoMode =
+            !autoMode;
+
+
+        if(autoMode){
+
+            this.innerText =
+                "STOP";
+
+            this.style.background =
+                "green";
+
+
+            autoTimer =
+                setInterval(
+                    function(){
+
+                        cannonAngle =
+                            Math.random()
+                            * 360
+                            - 180;
+
+
+                        barrel.style.transform =
+                            `translate(-50%,-100%)
+                             rotate(${cannonAngle}deg)`;
+
+
+                        shoot();
+
+                    },
+                    600
+                );
+
+
+        }else{
+
+            this.innerText =
+                "AUTO";
+
+            this.style.background =
+                "red";
+
+
+            clearInterval(
+                autoTimer
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   GIFT
+========================= */
+
+let giftReady = true;
+
+
+document.getElementById(
+    "giftBtn"
+).addEventListener(
+    "click",
+    function(){
+
+        if(!giftReady){
+
+            document.getElementById(
+                "message"
+            ).innerText =
+                "⏳ Gift မရသေးပါ";
+
+            return;
+        }
+
+
+        coins += 100;
 
         updateCoins();
 
-        document.getElementById("message").innerText =
-        "🎉 +" + reward + " Coins";
 
-        fish.innerHTML = "💥";
+        document.getElementById(
+            "message"
+        ).innerText =
+            "🎁 +100 Coins";
 
-        setTimeout(()=>{
 
-            if(id==="fish1") fish.innerHTML="🐠";
-            if(id==="fish2") fish.innerHTML="🐟";
-            if(id==="fish3") fish.innerHTML="🐡";
-            if(id==="fish4") fish.innerHTML="🦈";
-            if(id==="fish5") fish.innerHTML="🐋";
+        giftReady = false;
 
-        },300);
 
-    });
+        setTimeout(
+            function(){
 
-});
-  document.getElementById("autoBtn").addEventListener("click",function(){
+                giftReady = true;
 
-    document.getElementById("message").innerText =
-    "AUTO Mode (Demo)";
+            },
+            60000
+        );
 
-});
-
-document.getElementById("giftBtn").addEventListener("click",function(){
-
-  let giftReady = true;
-
-document.getElementById("giftBtn").addEventListener("click", function(){
-
-    if(!giftReady){
-        document.getElementById("message").innerText =
-        "⏳ Wait 1 minute!";
-        return;
     }
+);
 
-    let gift = 100;
+</script>
 
-    coins += gift;
-
-    updateCoins();
-
-    document.getElementById("message").innerText =
-    "🎁 Gift +" + gift;
-
-    giftReady = false;
-
-    setTimeout(()=>{
-        giftReady = true;
-    },60000);
-
-});
-
-});
-
-/* Start Message */
-function shoot() {
-
-    if (coins < bet) {
-        document.getElementById("message").innerText = "❌ Coins မလုံလောက်ပါ";
-        return;
-    }
-
-    coins -= bet;
-    updateCoins();
-
-    let hitFish = null;
-
-    fishIds.forEach(id => {
-
-        const fish = document.getElementById(id);
-        const rect = fish.getBoundingClientRect();
-
-       const centerX = Math.random() * window.innerWidth;
-        const cannonY = window.innerHeight - 120;
-if (
-    centerX >= rect.left &&
-    centerX <= rect.right &&
-    cannonY >= rect.top &&
-    cannonY <= rect.bottom
-) {
-    hitFish = fish;
-}
-
-});
-  
-    if (!hitFish) {
-    document.getElementById("message").innerText = "💨 Miss!";
-    return;
-  }
-if (!hitFish.hits) {
-    hitFish.hits = 0;
-    hitFish.need = Math.floor(Math.random() * 7) + 3;
-}
-
-hitFish.hits++;
-
-if (hitFish.hits < hitFish.need) {
-    document.getElementById("message").innerText =
-    "🎯 " + hitFish.hits + "/" + hitFish.need;
-    return;
-}
-
-let reward = bet * 2;
-
-coins += reward;
-updateCoins();
-
-document.getElementById("message").innerText =
-"🎉 +" + reward;
-  hitFish.hits = 0;
-hitFish.need = Math.floor(Math.random() * 7) + 3;
-
-  }
-
-const cannon = document.getElementById("cannon");
-
-cannon.addEventListener("click", shoot);
-
-let autoShoot;
-
-
-cannon.addEventListener("pointerdown", () => {
-    autoShoot = setInterval(shoot, 200);
-});
-
-cannon.addEventListener("pointerup", () => {
-    clearInterval(autoShoot);
-});
-
-cannon.addEventListener("pointerleave", () => {
-    clearInterval(autoShoot);
-});
-  </script>
 </body>
-</html>
-
+  </html>
