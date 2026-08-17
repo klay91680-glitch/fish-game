@@ -278,7 +278,7 @@ fishIds.forEach(id=>{
   fishIds.forEach(id=>{
 
     const fish = document.getElementById(id);
-
+/*
     fish.addEventListener("click",function(){
 if(coins < bet){
     document.getElementById("message").innerText =
@@ -324,7 +324,7 @@ coins += reward;;
 
         },300);
 
-    });
+    });*/
 
 });
   document.getElementById("autoBtn").addEventListener("click",function(){
@@ -366,7 +366,63 @@ document.getElementById("giftBtn").addEventListener("click", function(){
 });
 
 /* Start Message */
+function shoot() {
 
+    if (coins < bet) {
+        document.getElementById("message").innerText = "❌ Coins မလုံလောက်ပါ";
+        return;
+    }
+
+    coins -= bet;
+    updateCoins();
+
+    let hitFish = null;
+
+    fishIds.forEach(id => {
+
+        const fish = document.getElementById(id);
+        const rect = fish.getBoundingClientRect();
+
+        const centerX = window.innerWidth / 2;
+        const cannonY = window.innerHeight - 120;
+
+        if (
+            centerX >= rect.left &&
+            centerX <= rect.right &&
+            cannonY >= rect.top &&
+            cannonY <= rect.bottom
+        ) {
+            hitFish = fish;
+        }
+    });
+
+    if (!hitFish) {
+        document.getElementById("message").innerText = "💨 Miss!";
+        return;
+    }
+
+    let reward = bet * 2;
+
+    coins += reward;
+    updateCoins();
+
+    document.getElementById("message").innerText =
+    "🎉 +" + reward;
+}
+
+const cannon = document.getElementById("cannon");
+
+cannon.addEventListener("click", shoot);
+
+let autoShoot;
+
+cannon.addEventListener("touchstart", () => {
+    autoShoot = setInterval(shoot, 200);
+});
+
+cannon.addEventListener("touchend", () => {
+    clearInterval(autoShoot);
+});
 document.getElementById("message").innerText =
 "🐟 Fish Shooting Game Ready!";
   </script>
