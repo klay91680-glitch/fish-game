@@ -399,18 +399,32 @@ function shoot() {
     });
 
     if (!hitFish) {
+     if (!hitFish) {;
+     }
         document.getElementById("message").innerText = "💨 Miss!";
         return;
     }
-
-    let reward = bet * 2;
-
-    coins += reward;
-    updateCoins();
-
-    document.getElementById("message").innerText =
-    "🎉 +" + reward;
+if (!hitFish.hits) {
+    hitFish.hits = 0;
+    hitFish.need = Math.floor(Math.random() * 7) + 3;
 }
+
+hitFish.hits++;
+
+if (hitFish.hits < hitFish.need) {
+    document.getElementById("message").innerText =
+    "🎯 " + hitFish.hits + "/" + hitFish.need;
+    return;
+}
+
+let reward = bet * 2;
+
+coins += reward;
+updateCoins();
+
+document.getElementById("message").innerText =
+"🎉 +" + reward;
+
 
 const cannon = document.getElementById("cannon");
 
