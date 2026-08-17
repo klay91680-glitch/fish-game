@@ -396,17 +396,17 @@ function shoot() {
 
        const centerX = Math.random() * window.innerWidth;
         const cannonY = window.innerHeight - 120;
+if (
+    centerX >= rect.left &&
+    centerX <= rect.right &&
+    cannonY >= rect.top &&
+    cannonY <= rect.bottom
+) {
+    hitFish = fish;
+}
 
-        if (
-            centerX >= rect.left &&
-            centerX <= rect.right &&
-            cannonY >= rect.top &&
-            cannonY <= rect.bottom
-        ) {
-            hitFish = fish;
-        }
-    });
-
+});
+  
     if (!hitFish) {
     document.getElementById("message").innerText = "💨 Miss!";
     return;
