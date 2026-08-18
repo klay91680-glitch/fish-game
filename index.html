@@ -186,10 +186,6 @@ html,body{
     color:#ffe600;
 }
 
-#ammoValue{
-    color:#6effff;
-}
-
 #coinDisplay{
     display:flex;
     align-items:center;
@@ -573,6 +569,7 @@ html,body{
         padding:7px 3px;
     }
 }
+.fishHP,.fishHPbar{display:none!important;}
 </style>
 </head>
 
@@ -634,10 +631,6 @@ placeholder="🔒 စကားဝှက်">
 🏆 <span id="scoreValue">0</span>
 </div>
 
-<div class="info">
-🔫 Ammo <span id="ammoValue">100</span>
-</div>
-
 <div id="coinDisplay">
 🪙 <span id="coinValue">500</span>
 </div>
@@ -661,37 +654,22 @@ placeholder="🔒 စကားဝှက်">
 
 <div class="fish" id="fish1">
 🐠
-<div class="fishHP">
-<div class="fishHPbar" id="hp1"></div>
-</div>
 </div>
 
 <div class="fish" id="fish2">
 🐟
-<div class="fishHP">
-<div class="fishHPbar" id="hp2"></div>
-</div>
 </div>
 
 <div class="fish" id="fish3">
 🐡
-<div class="fishHP">
-<div class="fishHPbar" id="hp3"></div>
-</div>
 </div>
 
 <div class="fish" id="fish4">
 🦈
-<div class="fishHP">
-<div class="fishHPbar" id="hp4"></div>
-</div>
 </div>
 
 <div class="fish" id="fish5">
 🐋
-<div class="fishHP">
-<div class="fishHPbar" id="hp5"></div>
-</div>
 </div>
 
 
@@ -706,6 +684,18 @@ AUTO
 <button class="controlBtn" id="chatBtn">
 💬 အကူအညီ
 </button>
+
+<button id="linkAccountOpenBtn" class="controlBtn" style="background:#8e44ad;display:none;">🔗 Account ချိတ်မည်</button>
+
+<div id="linkAccountBox" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(350px,90vw);z-index:1800;padding:22px;border-radius:20px;background:rgba(0,20,45,.98);border:2px solid #55ddff;box-shadow:0 0 35px rgba(0,200,255,.4);text-align:center;">
+<h2 style="color:#ffd700;margin-bottom:8px;">🔗 Account ချိတ်မည်</h2>
+<p style="color:#aaa;font-size:12px;margin-bottom:12px;">Guest ရထားတဲ့ Coin / Point တွေ မပျောက်ဘဲ Account ထဲ ဆက်သိမ်းမယ်။</p>
+<input id="linkUsername" type="text" placeholder="👤 အကောင့်အမည်" style="width:100%;padding:11px;margin:5px 0;border-radius:10px;border:1px solid #55ddff;background:#001b3d;color:white;outline:none;">
+<input id="linkPassword" type="password" placeholder="🔒 Password (6 လုံးအနည်းဆုံး)" style="width:100%;padding:11px;margin:5px 0;border-radius:10px;border:1px solid #55ddff;background:#001b3d;color:white;outline:none;">
+<div id="linkAccountError" style="min-height:22px;color:#ff7777;font-size:12px;margin-top:5px;"></div>
+<button id="linkAccountBtn" style="width:100%;padding:11px;margin-top:6px;border:0;border-radius:10px;font-weight:bold;background:linear-gradient(135deg,#ffd700,#f0a500);color:#001b3d;">🔗 Account ချိတ်မည်</button>
+<button id="cancelLinkBtn" style="width:100%;padding:11px;margin-top:6px;border:0;border-radius:10px;font-weight:bold;background:#333;color:white;">ပိတ်မည်</button>
+</div>
 
 <div id="shotBox">
 
@@ -828,7 +818,7 @@ let currentUsername="";
 let isGuest=false;
 
 let score=0;
-let ammo=100;
+
 let coins=500;
 
 let registerMode=false;
@@ -1012,7 +1002,6 @@ async function registerAccount(){
             usernameKey:key,
             coins:500,
             score:0,
-            ammo:100,
             guest:false,
             createdAt:
                 firebase.database.ServerValue.TIMESTAMP
@@ -1203,6 +1192,8 @@ async function startGame(user,username,guest){
     gamePage.style.display="block";
 
     document.getElementById("gameUsername").innerText=username;
+    const accountIdEl=document.getElementById("accountId");
+    if(accountIdEl) accountIdEl.innerText="ID: "+user.uid;
 
     let data=null;
 
@@ -1226,7 +1217,6 @@ async function startGame(user,username,guest){
             username:username,
             coins:500,
             score:0,
-            ammo:100,
             guest:guest
         };
 
@@ -1245,11 +1235,9 @@ async function startGame(user,username,guest){
     }
 
     score=Number(data.score ?? 0);
-    ammo=Number(data.ammo ?? 100);
     coins=Number(data.coins ?? 500);
 
     if(coins<0)coins=500;
-    if(ammo<0)ammo=100;
 
     updateUI();
     resetFishHP();
@@ -1268,7 +1256,6 @@ async function startGame(user,username,guest){
 function updateUI(){
 
     document.getElementById("scoreValue").innerText=score;
-    document.getElementById("ammoValue").innerText=ammo;
     document.getElementById("coinValue").innerText=coins;
 
 }
@@ -1287,10 +1274,12 @@ async function saveUser(){
         .update({
 
             username:currentUsername,
+            usernameKey:usernameKey(currentUsername),
+            accountId:currentUser.uid,
             coins:coins,
             score:score,
-            ammo:ammo,
             guest:isGuest,
+            linked:!isGuest,
 
             updatedAt:
                 firebase.database.ServerValue.TIMESTAMP
@@ -1594,17 +1583,6 @@ function shoot(){
 
     }
 
-    if(ammo<=0){
-
-        showMessage(
-            "❌ Ammo ကုန်ပါပြီ",
-            false
-        );
-
-        return;
-
-    }
-
     /* Virtual Coin ပစ်ခ */
 
     if(coins<selectedCost){
@@ -1619,8 +1597,6 @@ function shoot(){
     }
 
     coins-=selectedCost;
-    ammo--;
-
     updateUI();
 
     saveUser();
@@ -1865,7 +1841,6 @@ document.getElementById("autoBtn").onclick=function(){
         autoTimer=setInterval(()=>{
 
             if(
-                ammo<=0 ||
                 coins<selectedCost
             ){
 
@@ -1907,6 +1882,80 @@ document.getElementById("autoBtn").onclick=function(){
 
 };
 
+
+/* ================= GUEST ACCOUNT LINK ================= */
+
+const linkOpenBtn=document.getElementById("linkAccountOpenBtn");
+const linkBox=document.getElementById("linkAccountBox");
+const linkBtn=document.getElementById("linkAccountBtn");
+const cancelLinkBtn=document.getElementById("cancelLinkBtn");
+const linkUserInput=document.getElementById("linkUsername");
+const linkPassInput=document.getElementById("linkPassword");
+const linkError=document.getElementById("linkAccountError");
+
+function refreshLinkButton(){
+    if(!linkOpenBtn)return;
+    linkOpenBtn.style.display=(currentUser && currentUser.isAnonymous) ? "block" : "none";
+}
+
+linkOpenBtn.onclick=()=>{
+    if(!currentUser || !currentUser.isAnonymous){
+        showMessage("❌ Guest အဖြစ်ဝင်ထားမှ Account ချိတ်လို့ရပါတယ်",false);
+        return;
+    }
+    linkBox.style.display="block";
+    linkError.innerText="";
+    linkUserInput.value="";
+    linkPassInput.value="";
+};
+
+cancelLinkBtn.onclick=()=>{ linkBox.style.display="none"; };
+
+linkBtn.onclick=async()=>{
+    if(!currentUser || !currentUser.isAnonymous){
+        linkError.innerText="❌ Guest account မဟုတ်ပါ";
+        return;
+    }
+    const username=linkUserInput.value.trim();
+    const password=linkPassInput.value;
+    if(!validUsername(username)){
+        linkError.innerText="❌ Username 3-20 လုံး (A-Z a-z 0-9 _)";
+        return;
+    }
+    if(password.length<6){
+        linkError.innerText="❌ Password အနည်းဆုံး 6 လုံး ထည့်ပါ";
+        return;
+    }
+    linkBtn.disabled=true;
+    linkError.style.color="#88ddff";
+    linkError.innerText="⏳ Account ချိတ်နေပါတယ်...";
+    try{
+        const key=usernameKey(username);
+        const nameSnap=await db.ref("usernames/"+key).once("value");
+        if(nameSnap.exists()) throw new Error("USERNAME_EXISTS");
+        const credential=firebase.auth.EmailAuthProvider.credential(usernameEmail(username),password);
+        const result=await currentUser.linkWithCredential(credential);
+        currentUser=result.user;
+        await db.ref("usernames/"+key).set(currentUser.uid);
+        await db.ref("users/"+currentUser.uid).update({
+            username:username, usernameKey:key, accountId:currentUser.uid,
+            coins:Number(coins), score:Number(score), guest:false, linked:true, linkedFromGuest:true,
+            updatedAt:firebase.database.ServerValue.TIMESTAMP
+        });
+        currentUsername=username; isGuest=false; accountLinked=true;
+        document.getElementById("gameUsername").innerText=username;
+        const idEl=document.getElementById("accountId");
+        if(idEl) idEl.innerText="ID: "+currentUser.uid;
+        updateUI(); refreshLinkButton(); linkBox.style.display="none";
+        showMessage("✅ Account ချိတ်ပြီးပါပြီ — Coin/Point မပျောက်ပါ");
+    }catch(error){
+        console.error("Account link error",error);
+        linkError.style.color="#ff7777";
+        if(error.message==="USERNAME_EXISTS" || error.code==="auth/email-already-in-use" || error.code==="auth/credential-already-in-use") linkError.innerText="❌ ဒီ Username ရှိပြီးသားပါ";
+        else if(error.code==="auth/operation-not-allowed") linkError.innerText="❌ Firebase မှာ Email/Password Login ကို Enable လုပ်ပါ";
+        else linkError.innerText="❌ Account ချိတ်မရပါ: "+(error.message||"");
+    }finally{ linkBtn.disabled=false; }
+};
 
 /* ================= CHAT ================= */
 
@@ -2162,14 +2211,15 @@ if(firebaseReady){
             */
 
             if(user.isAnonymous){
-
-                startGame(
-                    user,
-                    "Guest",
-                    true
-                );
-
+                startGame(user,"Guest",true);
+            }else{
+                db.ref("users/"+user.uid).once("value").then(snap=>{
+                    const data=snap.val()||{};
+                    startGame(user,data.username||"Player",false);
+                });
             }
+
+            setTimeout(refreshLinkButton,300);
 
         }
     );
