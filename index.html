@@ -33,16 +33,15 @@ html,body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:
-        linear-gradient(135deg,#001b3d,#003d7a,#0066b3);
+    background:linear-gradient(135deg,#001b3d,#003d7a,#0066b3);
 }
 
 #loginBox{
     width:90%;
     max-width:380px;
-    padding:35px 25px;
+    padding:30px 22px;
     text-align:center;
-    background:rgba(0,0,0,.72);
+    background:rgba(0,0,0,.75);
     border:2px solid rgba(255,215,0,.35);
     border-radius:24px;
     box-shadow:0 0 50px rgba(0,120,255,.25);
@@ -50,20 +49,20 @@ html,body{
 
 #loginBox h1{
     color:#ffd700;
-    font-size:28px;
-    margin-bottom:6px;
+    font-size:27px;
+    margin-bottom:7px;
 }
 
 .loginSub{
     color:#88ddff;
     font-size:14px;
-    margin-bottom:22px;
+    margin-bottom:20px;
 }
 
 #loginBox input{
     width:100%;
     padding:13px 15px;
-    margin:7px 0;
+    margin:6px 0;
     border-radius:12px;
     border:2px solid rgba(255,255,255,.12);
     background:rgba(255,255,255,.08);
@@ -83,7 +82,7 @@ html,body{
 .loginBtn{
     width:100%;
     padding:12px;
-    margin:7px 0;
+    margin:6px 0;
     border:0;
     border-radius:12px;
     font-size:16px;
@@ -115,7 +114,7 @@ html,body{
 }
 
 #loginError{
-    min-height:22px;
+    min-height:24px;
     margin:6px 0;
     color:#ff7777;
     font-size:13px;
@@ -129,15 +128,37 @@ html,body{
     inset:0;
     overflow:hidden;
     background:
-        linear-gradient(
-            to bottom,
-            #002b5c 0%,
-            #005e9e 50%,
-            #00a8d8 100%
-        );
+    linear-gradient(
+        to bottom,
+        #002b5c 0%,
+        #005e9e 50%,
+        #00a8d8 100%
+    );
 }
 
-/* TOP */
+/* bubbles */
+
+.bubble{
+    position:absolute;
+    border:2px solid rgba(255,255,255,.35);
+    border-radius:50%;
+    pointer-events:none;
+    animation:bubbleMove linear infinite;
+}
+
+@keyframes bubbleMove{
+    from{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+    20%{opacity:.7}
+    100%{
+        transform:translateY(-120px);
+        opacity:0;
+    }
+}
+
+/* ================= TOP ================= */
 
 #topBar{
     position:absolute;
@@ -155,7 +176,7 @@ html,body{
 .info{
     background:rgba(0,0,0,.6);
     color:white;
-    padding:4px 9px;
+    padding:5px 9px;
     border-radius:10px;
     font-size:12px;
     font-weight:bold;
@@ -175,13 +196,12 @@ html,body{
     gap:5px;
     padding:5px 12px;
     border-radius:20px;
-    background:
-        radial-gradient(
-            circle at 30% 30%,
-            #ffd700,
-            #e6a800,
-            #b8860b
-        );
+    background:radial-gradient(
+        circle at 30% 30%,
+        #ffd700,
+        #e6a800,
+        #b8860b
+    );
     border:2px solid #fff8dc;
     color:white;
     font-weight:bold;
@@ -210,11 +230,11 @@ html,body{
     color:white;
 }
 
-/* MESSAGE */
+/* ================= MESSAGE ================= */
 
 #message{
     position:absolute;
-    top:52px;
+    top:55px;
     left:50%;
     transform:translateX(-50%);
     z-index:600;
@@ -225,40 +245,44 @@ html,body{
     text-shadow:0 0 10px black;
 }
 
-/* FISH */
+/* ================= FISH ================= */
 
 .fish{
     position:absolute;
     font-size:45px;
     z-index:30;
     pointer-events:none;
+    width:70px;
+    height:55px;
+    text-align:center;
 }
 
 .fishHP{
     position:absolute;
     left:50%;
-    bottom:-9px;
+    bottom:-2px;
     transform:translateX(-50%);
-    width:32px;
-    height:4px;
-    background:rgba(255,0,0,.4);
-    border-radius:4px;
+    width:42px;
+    height:5px;
+    background:rgba(255,0,0,.5);
+    border-radius:5px;
     overflow:hidden;
 }
 
 .fishHPbar{
     height:100%;
-    background:#00ff00;
+    width:100%;
+    background:#00ff4c;
 }
 
-/* CANNON */
+/* ================= CANNON ================= */
 
 #cannon{
     position:absolute;
     left:50%;
     bottom:15px;
-    width:75px;
-    height:75px;
+    width:80px;
+    height:80px;
     transform:translateX(-50%);
     z-index:400;
 }
@@ -268,8 +292,8 @@ html,body{
     left:50%;
     top:58%;
     width:19px;
-    height:55px;
-    transform:translate(-50%,-100%) rotate(0deg);
+    height:58px;
+    transform:translate(-50%,-100%);
     transform-origin:50% 100%;
     background:linear-gradient(
         to right,
@@ -298,42 +322,44 @@ html,body{
     position:absolute;
     left:50%;
     bottom:0;
-    width:55px;
-    height:28px;
+    width:58px;
+    height:30px;
     transform:translateX(-50%);
     background:linear-gradient(#35d8ff,#0871a8);
     border:3px solid #063c60;
     border-radius:16px 16px 6px 6px;
 }
 
-/* BULLET */
+/* ================= BULLET ================= */
 
 .bullet{
     position:absolute;
-    width:7px;
-    height:18px;
+    width:8px;
+    height:19px;
     border-radius:9px;
     background:#fff36b;
     box-shadow:
-        0 0 8px white,
-        0 0 16px #ffe600;
+    0 0 8px white,
+    0 0 16px #ffe600;
     z-index:450;
 }
 
-/* CONTROLS */
+/* ================= CONTROLS ================= */
 
 #controls{
     position:absolute;
     left:8px;
-    bottom:12px;
+    right:8px;
+    bottom:10px;
     z-index:500;
     display:flex;
+    align-items:center;
     gap:5px;
 }
 
 .controlBtn{
     border:0;
-    padding:7px 10px;
+    padding:8px 10px;
     border-radius:10px;
     color:white;
     font-size:11px;
@@ -344,12 +370,34 @@ html,body{
     background:#e00000;
 }
 
-#giftBtn{
-    background:#8e24aa;
-}
-
 #chatBtn{
     background:#0088cc;
+}
+
+/* ================= SHOT POWER ================= */
+
+#shotBox{
+    display:flex;
+    gap:4px;
+    margin-left:auto;
+}
+
+.shotBtn{
+    min-width:42px;
+    padding:8px 5px;
+    border:2px solid rgba(255,255,255,.3);
+    border-radius:9px;
+    background:rgba(0,0,0,.5);
+    color:white;
+    font-weight:bold;
+    font-size:10px;
+}
+
+.shotBtn.active{
+    background:#ffd700;
+    color:#001b3d;
+    border-color:#fff;
+    box-shadow:0 0 12px rgba(255,215,0,.8);
 }
 
 /* ================= CHAT ================= */
@@ -406,7 +454,6 @@ html,body{
     color:#55ddff;
     font-weight:bold;
     font-size:11px;
-    margin-bottom:3px;
 }
 
 .chatTime{
@@ -443,50 +490,6 @@ html,body{
     font-weight:bold;
 }
 
-/* ================= COIN PACK ================= */
-
-#coinPackBox{
-    display:none;
-    position:fixed;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:min(340px,90vw);
-    z-index:1600;
-    padding:20px;
-    border-radius:20px;
-    background:rgba(0,20,45,.98);
-    border:2px solid #ffd700;
-    box-shadow:0 0 40px rgba(255,215,0,.3);
-}
-
-#coinPackBox h2{
-    text-align:center;
-    color:#ffd700;
-    margin-bottom:15px;
-}
-
-.packBtn{
-    width:100%;
-    padding:11px;
-    margin:5px 0;
-    border:1px solid #ffd700;
-    border-radius:10px;
-    background:rgba(255,215,0,.1);
-    color:white;
-    font-weight:bold;
-}
-
-#closePack{
-    width:100%;
-    margin-top:10px;
-    padding:9px;
-    border:0;
-    border-radius:10px;
-    background:#555;
-    color:white;
-}
-
 /* ================= EFFECT ================= */
 
 .hitEffect{
@@ -504,6 +507,28 @@ html,body{
     }
     to{
         transform:scale(1.5);
+        opacity:0;
+    }
+}
+
+.coinFloat{
+    position:absolute;
+    z-index:800;
+    color:#ffe600;
+    font-size:18px;
+    font-weight:bold;
+    pointer-events:none;
+    animation:coinFloat .8s ease-out forwards;
+    text-shadow:0 0 8px #000;
+}
+
+@keyframes coinFloat{
+    from{
+        transform:translateY(0);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-45px);
         opacity:0;
     }
 }
@@ -537,21 +562,15 @@ html,body{
         font-size:13px;
     }
 
-    #controls{
-        bottom:9px;
-    }
-
     .controlBtn{
-        font-size:10px;
-        padding:6px 8px;
+        font-size:9px;
+        padding:7px 7px;
     }
 
-    #loginBox{
-        padding:28px 20px;
-    }
-
-    #loginBox h1{
-        font-size:24px;
+    .shotBtn{
+        min-width:38px;
+        font-size:9px;
+        padding:7px 3px;
     }
 }
 </style>
@@ -559,350 +578,298 @@ html,body{
 
 <body>
 
-<!-- =========================================================
-     LOGIN
-========================================================= -->
+<!-- ================= LOGIN ================= -->
 
 <div id="loginPage">
 
-    <div id="loginBox">
+<div id="loginBox">
 
-        <h1>🐟 ငါးပစ်ဂိမ်း</h1>
+<h1>🐟 ငါးပစ်ဂိမ်း</h1>
 
-        <div class="loginSub" id="loginSubTitle">
-            အကောင့်ဝင်ရန်
-        </div>
+<div class="loginSub" id="loginSubTitle">
+အကောင့်ဝင်ရန်
+</div>
 
-        <input
-            id="loginUsername"
-            type="text"
-            autocomplete="username"
-            placeholder="👤 အသုံးပြုသူအမည်">
+<input
+id="loginUsername"
+type="text"
+autocomplete="username"
+placeholder="👤 အကောင့်အမည်">
 
-        <input
-            id="loginPassword"
-            type="password"
-            autocomplete="current-password"
-            placeholder="🔒 စကားဝှက်">
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+placeholder="🔒 စကားဝှက်">
 
-        <div id="loginError"></div>
+<div id="loginError"></div>
 
-        <button class="loginBtn" id="loginBtn">
-            🔑 အကောင့်ဝင်မည်
-        </button>
+<button class="loginBtn" id="loginBtn">
+🔑 အကောင့်ဝင်မည်
+</button>
 
-        <button class="loginBtn" id="registerBtn">
-            📝 အကောင့်အသစ်ဖွင့်မည်
-        </button>
+<button class="loginBtn" id="registerBtn">
+📝 အကောင့်အသစ်ဖွင့်မည်
+</button>
 
-        <button class="loginBtn" id="guestBtn">
-            👻 ဧည့်သည်အဖြစ် ဝင်မည်
-        </button>
+<button class="loginBtn" id="guestBtn">
+👻 ဧည့်သည်အဖြစ် ဝင်မည်
+</button>
 
-        <span id="switchLink">
-            အကောင့်မရှိသေးဘူးလား? အသစ်ဖွင့်ရန်
-        </span>
+<span id="switchLink">
+အကောင့်မရှိသေးဘူးလား? အသစ်ဖွင့်ရန်
+</span>
 
-    </div>
-
+</div>
 </div>
 
 
-<!-- =========================================================
-     GAME
-========================================================= -->
+<!-- ================= GAME ================= -->
 
 <div id="gamePage">
 
-    <div id="topBar">
+<div id="topBar">
 
-        <div class="info">
-            🏆 <span id="scoreValue">0</span>
-        </div>
+<div class="info">
+🏆 <span id="scoreValue">0</span>
+</div>
 
-        <div class="info">
-            🔫 <span id="ammoValue">100</span>
-        </div>
+<div class="info">
+🔫 Ammo <span id="ammoValue">100</span>
+</div>
 
-        <div id="coinDisplay">
-            🪙 <span id="coinValue">500</span>
-        </div>
+<div id="coinDisplay">
+🪙 <span id="coinValue">500</span>
+</div>
 
-        <div id="userInfo">
-            👤 <span id="gameUsername">Guest</span>
-        </div>
+<div id="userInfo">
+👤 <span id="gameUsername">Guest</span>
+</div>
 
-        <button id="logoutBtn">
-            🚪ထွက်
-        </button>
+<button id="logoutBtn">
+🚪 ထွက်
+</button>
 
-    </div>
+</div>
 
-
-    <div id="message">
-        🎯 ငါးပစ်ဂိမ်း
-    </div>
-
-
-    <!-- FISH -->
-
-    <div class="fish" id="fish1">
-        🐠
-        <div class="fishHP">
-            <div class="fishHPbar" id="hp1"></div>
-        </div>
-    </div>
-
-    <div class="fish" id="fish2">
-        🐟
-        <div class="fishHP">
-            <div class="fishHPbar" id="hp2"></div>
-        </div>
-    </div>
-
-    <div class="fish" id="fish3">
-        🐡
-        <div class="fishHP">
-            <div class="fishHPbar" id="hp3"></div>
-        </div>
-    </div>
-
-    <div class="fish" id="fish4">
-        🦈
-        <div class="fishHP">
-            <div class="fishHPbar" id="hp4"></div>
-        </div>
-    </div>
-
-    <div class="fish" id="fish5">
-        🐋
-        <div class="fishHP">
-            <div class="fishHPbar" id="hp5"></div>
-        </div>
-    </div>
+<div id="message">
+🎯 ငါးပစ်ဂိမ်း
+</div>
 
 
-    <!-- CONTROLS -->
+<!-- FISH -->
 
-    <div id="controls">
+<div class="fish" id="fish1">
+🐠
+<div class="fishHP">
+<div class="fishHPbar" id="hp1"></div>
+</div>
+</div>
 
-        <button class="controlBtn" id="autoBtn">
-            AUTO
-        </button>
+<div class="fish" id="fish2">
+🐟
+<div class="fishHP">
+<div class="fishHPbar" id="hp2"></div>
+</div>
+</div>
 
-        <button class="controlBtn" id="giftBtn">
-            🎁+20
-        </button>
+<div class="fish" id="fish3">
+🐡
+<div class="fishHP">
+<div class="fishHPbar" id="hp3"></div>
+</div>
+</div>
 
-        <button class="controlBtn" id="chatBtn">
-            💬 အကူအညီ
-        </button>
+<div class="fish" id="fish4">
+🦈
+<div class="fishHP">
+<div class="fishHPbar" id="hp4"></div>
+</div>
+</div>
 
-    </div>
-
-
-    <!-- CANNON -->
-
-    <div id="cannon">
-
-        <div id="barrel">
-            <div id="muzzle"></div>
-        </div>
-
-        <div id="cannonBase"></div>
-
-    </div>
-
-
-    <!-- =====================================================
-         CHAT
-    ====================================================== -->
-
-    <div id="chatBox">
-
-        <div id="chatHeader">
-
-            <span>💬 အကူအညီတောင်းရန်</span>
-
-            <button id="closeChat">
-                ✕
-            </button>
-
-        </div>
-
-        <div id="chatMessages"></div>
-
-        <div id="chatInputArea">
-
-            <input
-                id="chatInput"
-                type="text"
-                maxlength="500"
-                placeholder="အကူအညီလိုတာ ရေးပါ...">
-
-            <button id="sendChat">
-                ပို့
-            </button>
-
-        </div>
-
-    </div>
+<div class="fish" id="fish5">
+🐋
+<div class="fishHP">
+<div class="fishHPbar" id="hp5"></div>
+</div>
+</div>
 
 
-    <!-- =====================================================
-         COIN PACK
-    ====================================================== -->
+<!-- CONTROLS -->
 
-    <div id="coinPackBox">
+<div id="controls">
 
-        <h2>📦 Virtual Coin Pack</h2>
+<button class="controlBtn" id="autoBtn">
+AUTO
+</button>
 
-        <button class="packBtn" data-pack="100">
-            🎁 +100 Coin
-        </button>
+<button class="controlBtn" id="chatBtn">
+💬 အကူအညီ
+</button>
 
-        <button class="packBtn" data-pack="500">
-            🎁 +500 Coin
-        </button>
+<div id="shotBox">
 
-        <button class="packBtn" data-pack="1000">
-            🎁 +1,000 Coin
-        </button>
+<button class="shotBtn active" data-cost="10">
+10
+</button>
 
-        <button class="packBtn" data-pack="5000">
-            🎁 +5,000 Coin
-        </button>
+<button class="shotBtn" data-cost="20">
+20
+</button>
 
-        <button id="closePack">
-            ပိတ်မည်
-        </button>
+<button class="shotBtn" data-cost="50">
+50
+</button>
 
-    </div>
+<button class="shotBtn" data-cost="200">
+200
+</button>
+
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     FIREBASE
-========================================================= -->
+<!-- CANNON -->
+
+<div id="cannon">
+
+<div id="barrel">
+<div id="muzzle"></div>
+</div>
+
+<div id="cannonBase"></div>
+
+</div>
+
+
+<!-- CHAT -->
+
+<div id="chatBox">
+
+<div id="chatHeader">
+
+<span>💬 အကူအညီတောင်းရန်</span>
+
+<button id="closeChat">
+✕
+</button>
+
+</div>
+
+<div id="chatMessages"></div>
+
+<div id="chatInputArea">
+
+<input
+id="chatInput"
+type="text"
+maxlength="500"
+placeholder="အကူအညီလိုတာ ရေးပါ...">
+
+<button id="sendChat">
+ပို့
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= FIREBASE ================= -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
-
 <script>
 
-/* ============================================================
-   FIREBASE CONFIG
-   ဒီအပိုင်းကို Firebase Web App config နဲ့ အစားထိုးပါ
-============================================================ */
+/* ================= FIREBASE CONFIG ================= */
 
 const firebaseConfig = {
-
-    apiKey: "YOUR_API_KEY",
-
-    authDomain:
-        "komin-243c3-default-rtdb.firebaseapp.com",
-
-    databaseURL:
-        "https://komin-243c3-default-rtdb.firebaseio.com",
-
-    projectId:
-        "komin-243c3",
-
-    storageBucket:
-        "komin-243c3.appspot.com",
-
-    messagingSenderId:
-        "YOUR_MESSAGING_SENDER_ID",
-
-    appId:
-        "YOUR_APP_ID"
+    apiKey:"AIzaSyC8JUDYpvTSotefo8xswN8fXVtF12kxIjM",
+    authDomain:"komin-243c3.firebaseapp.com",
+    databaseURL:"https://komin-243c3-default-rtdb.firebaseio.com",
+    projectId:"komin-243c3",
+    storageBucket:"komin-243c3.firebasestorage.app",
+    messagingSenderId:"811139202151",
+    appId:"1:811139202151:web:cc40c540bdcc9631bc28c2"
 };
 
+let firebaseReady=false;
+let auth=null;
+let db=null;
 
-firebase.initializeApp(firebaseConfig);
+try{
 
-const auth = firebase.auth();
-const db = firebase.database();
+    firebase.initializeApp(firebaseConfig);
 
+    auth=firebase.auth();
+    db=firebase.database();
 
-/* ============================================================
-   ELEMENTS
-============================================================ */
+    firebaseReady=true;
 
-const loginPage =
-    document.getElementById("loginPage");
+}catch(error){
 
-const gamePage =
-    document.getElementById("gamePage");
+    console.error("Firebase error:",error);
 
-const loginUsername =
-    document.getElementById("loginUsername");
+    document.getElementById("loginError").innerText=
+        "❌ Firebase မတက်ပါ။ Internet / Firebase setting ကို စစ်ပါ။";
 
-const loginPassword =
-    document.getElementById("loginPassword");
-
-const loginError =
-    document.getElementById("loginError");
-
-const loginBtn =
-    document.getElementById("loginBtn");
-
-const registerBtn =
-    document.getElementById("registerBtn");
-
-const guestBtn =
-    document.getElementById("guestBtn");
-
-const switchLink =
-    document.getElementById("switchLink");
-
-const loginSubTitle =
-    document.getElementById("loginSubTitle");
-
-
-/* ============================================================
-   GAME DATA
-============================================================ */
-
-let currentUser = null;
-
-let currentUsername = "";
-
-let isGuest = false;
-
-let score = 0;
-
-let ammo = 100;
-
-let coins = 500;
-
-
-/* ============================================================
-   FIREBASE USERNAME FORMAT
-============================================================ */
-
-/*
-   Firebase Email/Password Auth ကိုသုံးပေမယ့်
-   user က Gmail ထည့်စရာမလိုအောင်
-   internal email ပုံစံတစ်ခု ဖန်တီးထားပါတယ်။
-
-   User မြင်ရတာက username ပဲဖြစ်ပါတယ်။
-*/
-
-function usernameEmail(username){
-
-    return username.toLowerCase()
-        .replace(/[^a-z0-9_]/g,"") +
-        "@fishgame.local";
 }
 
 
-/* ============================================================
-   USERNAME VALIDATION
-============================================================ */
+/* ================= VARIABLES ================= */
+
+let currentUser=null;
+let currentUsername="";
+let isGuest=false;
+
+let score=0;
+let ammo=100;
+let coins=500;
+
+let registerMode=false;
+
+let selectedCost=10;
+
+
+/* ================= ELEMENTS ================= */
+
+const loginPage=document.getElementById("loginPage");
+const gamePage=document.getElementById("gamePage");
+
+const loginUsername=document.getElementById("loginUsername");
+const loginPassword=document.getElementById("loginPassword");
+
+const loginError=document.getElementById("loginError");
+
+const loginBtn=document.getElementById("loginBtn");
+const registerBtn=document.getElementById("registerBtn");
+const guestBtn=document.getElementById("guestBtn");
+
+const switchLink=document.getElementById("switchLink");
+const loginSubTitle=document.getElementById("loginSubTitle");
+
+
+/* ================= USERNAME ================= */
+
+function usernameKey(username){
+
+    return username
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9_]/g,"");
+
+}
+
+function usernameEmail(username){
+
+    return usernameKey(username)+"@fishgame.local";
+
+}
 
 function validUsername(username){
 
@@ -911,229 +878,151 @@ function validUsername(username){
 }
 
 
-/* ============================================================
-   MESSAGE
-============================================================ */
+/* ================= MESSAGE ================= */
 
 function showMessage(text,good=true){
 
-    const el =
-        document.getElementById("message");
+    const el=document.getElementById("message");
 
-    el.innerText = text;
+    el.innerText=text;
 
-    el.style.color =
+    el.style.color=
         good ? "#fff45c" : "#ff6b6b";
 
     clearTimeout(el._timer);
 
-    el._timer =
-        setTimeout(function(){
+    el._timer=setTimeout(()=>{
 
-            el.innerText =
-                "🎯 ငါးပစ်ဂိမ်း";
+        el.innerText="🎯 ငါးပစ်ဂိမ်း";
+        el.style.color="#fff45c";
 
-            el.style.color =
-                "#fff45c";
+    },2200);
 
-        },2000);
 }
 
 
-/* ============================================================
-   LOGIN MODE
-============================================================ */
-
-let registerMode = false;
-
+/* ================= LOGIN MODE ================= */
 
 function setRegisterMode(){
 
-    registerMode = true;
+    registerMode=true;
 
-    loginSubTitle.innerText =
-        "အကောင့်အသစ်ဖွင့်ရန်";
+    loginSubTitle.innerText="အကောင့်အသစ်ဖွင့်ရန်";
 
-    loginBtn.innerText =
-        "📝 အကောင့်အသစ်ဖွင့်မည်";
+    loginBtn.innerText="📝 အကောင့်အသစ်ဖွင့်မည်";
 
-    registerBtn.style.display =
-        "none";
+    registerBtn.style.display="none";
 
-    switchLink.innerText =
-        "အကောင့်ရှိပြီးသားလား? ဝင်ရန်";
+    switchLink.innerText="အကောင့်ရှိပြီးသားလား? ဝင်ရန်";
 
-    loginError.innerText =
-        "Username 3-20 လုံး၊ အင်္ဂလိပ်စာ/နံပါတ်/_ သုံးနိုင်ပါတယ်။";
+    loginError.innerText=
+        "Username 3-20 လုံး • A-Z • a-z • 0-9 • _";
 
-    loginError.style.color =
-        "#88ddff";
+    loginError.style.color="#88ddff";
+
 }
 
 
 function setLoginMode(){
 
-    registerMode = false;
+    registerMode=false;
 
-    loginSubTitle.innerText =
-        "အကောင့်ဝင်ရန်";
+    loginSubTitle.innerText="အကောင့်ဝင်ရန်";
 
-    loginBtn.innerText =
-        "🔑 အကောင့်ဝင်မည်";
+    loginBtn.innerText="🔑 အကောင့်ဝင်မည်";
 
-    registerBtn.style.display =
-        "block";
+    registerBtn.style.display="block";
 
-    switchLink.innerText =
+    switchLink.innerText=
         "အကောင့်မရှိသေးဘူးလား? အသစ်ဖွင့်ရန်";
 
-    loginError.innerText = "";
+    loginError.innerText="";
+
+    loginError.style.color="#ff7777";
 
 }
 
 
-/* ============================================================
-   REGISTER BUTTON
-============================================================ */
-
-registerBtn.onclick =
-    function(){
-
-        setRegisterMode();
-
-    };
-
-
-switchLink.onclick =
-    function(){
-
-        if(registerMode){
-
-            setLoginMode();
-
-        }else{
-
-            setRegisterMode();
-
-        }
-
-    };
-
-
-/* ============================================================
-   REGISTER
-============================================================ */
+/* ================= REGISTER ================= */
 
 async function registerAccount(){
 
-    const username =
-        loginUsername.value.trim();
+    if(!firebaseReady){
 
-    const password =
-        loginPassword.value;
+        loginError.innerText=
+            "❌ Firebase မတက်သေးပါ။";
+
+        return;
+
+    }
+
+    const username=loginUsername.value.trim();
+    const password=loginPassword.value;
 
     if(!validUsername(username)){
 
-        loginError.innerText =
-            "❌ Username 3-20 လုံး သုံးပါ။ A-Z, a-z, 0-9, _ သုံးနိုင်ပါတယ်။";
-
-        loginError.style.color =
-            "#ff6b6b";
+        loginError.innerText=
+            "❌ အကောင့်အမည် 3-20 လုံး ဖြစ်ရပါမယ်။";
 
         return;
 
     }
 
-    if(password.length < 6){
+    if(password.length<6){
 
-        loginError.innerText =
+        loginError.innerText=
             "❌ Password အနည်းဆုံး 6 လုံး ထည့်ပါ။";
 
-        loginError.style.color =
-            "#ff6b6b";
-
         return;
 
     }
 
+    const key=usernameKey(username);
 
     try{
 
-        /*
-          Username မထပ်စေရန် usernames node ကို
-          အရင်စစ်ပါတယ်။
-        */
-
-        const key =
-            username.toLowerCase();
-
-        const snap =
-            await db.ref(
-                "usernames/" + key
-            ).once("value");
-
+        const snap=await db
+        .ref("usernames/"+key)
+        .once("value");
 
         if(snap.exists()){
 
-            loginError.innerText =
-                "❌ ဒီ Username ရှိပြီးသားပါ။";
-
-            loginError.style.color =
-                "#ff6b6b";
+            loginError.innerText=
+                "❌ ဒီအကောင့်အမည် ရှိပြီးသားပါ။";
 
             return;
 
         }
 
+        const email=usernameEmail(username);
 
-        const email =
-            usernameEmail(username);
+        const result=
+        await auth.createUserWithEmailAndPassword(
+            email,
+            password
+        );
 
+        const uid=result.user.uid;
 
-        const result =
-            await auth.createUserWithEmailAndPassword(
-                email,
-                password
-            );
+        await db.ref("usernames/"+key).set(uid);
 
-
-        const uid =
-            result.user.uid;
-
-
-        await db.ref(
-            "usernames/" + key
-        ).set(uid);
-
-
-        await db.ref(
-            "users/" + uid
-        ).set({
+        await db.ref("users/"+uid).set({
 
             username:username,
-
             usernameKey:key,
-
             coins:500,
-
             score:0,
-
             ammo:100,
-
             guest:false,
-
             createdAt:
                 firebase.database.ServerValue.TIMESTAMP
 
         });
 
-
-        loginError.innerText =
+        loginError.innerText=
             "✅ အကောင့်ဖွင့်ပြီးပါပြီ။";
 
-        loginError.style.color =
-            "#6eff6b";
-
+        loginError.style.color="#6eff6b";
 
         await startGame(
             result.user,
@@ -1141,39 +1030,49 @@ async function registerAccount(){
             false
         );
 
-
     }catch(error){
 
         console.error(error);
 
-        loginError.innerText =
-            "❌ အကောင့်ဖွင့်မရပါ။ Firebase Auth ကို စစ်ပါ။";
+        loginError.style.color="#ff7777";
 
-        loginError.style.color =
-            "#ff6b6b";
+        if(error.code==="auth/email-already-in-use"){
+
+            loginError.innerText=
+                "❌ ဒီအကောင့်အမည် အသုံးပြုပြီးသားပါ။";
+
+        }else{
+
+            loginError.innerText=
+                "❌ အကောင့်ဖွင့်မရပါ။ Firebase setting ကို စစ်ပါ။";
+
+        }
 
     }
 
 }
 
 
-/* ============================================================
-   LOGIN
-============================================================ */
+/* ================= LOGIN ================= */
 
 async function loginAccount(){
 
-    const username =
-        loginUsername.value.trim();
+    if(!firebaseReady){
 
-    const password =
-        loginPassword.value;
+        loginError.innerText=
+            "❌ Firebase မတက်သေးပါ။";
 
+        return;
+
+    }
+
+    const username=loginUsername.value.trim();
+    const password=loginPassword.value;
 
     if(!validUsername(username)){
 
-        loginError.innerText =
-            "❌ Username မှန်ကန်စွာထည့်ပါ။";
+        loginError.innerText=
+            "❌ အကောင့်အမည် မှန်ကန်စွာထည့်ပါ။";
 
         return;
 
@@ -1181,26 +1080,22 @@ async function loginAccount(){
 
     if(!password){
 
-        loginError.innerText =
+        loginError.innerText=
             "❌ Password ထည့်ပါ။";
 
         return;
 
     }
 
-
     try{
 
-        const email =
-            usernameEmail(username);
+        const email=usernameEmail(username);
 
-
-        const result =
-            await auth.signInWithEmailAndPassword(
-                email,
-                password
-            );
-
+        const result=
+        await auth.signInWithEmailAndPassword(
+            email,
+            password
+        );
 
         await startGame(
             result.user,
@@ -1208,210 +1103,194 @@ async function loginAccount(){
             false
         );
 
-
     }catch(error){
 
         console.error(error);
 
-        loginError.innerText =
-            "❌ Username သို့မဟုတ် Password မှားနေပါတယ်။";
-
-        loginError.style.color =
-            "#ff6b6b";
+        loginError.innerText=
+            "❌ အကောင့်အမည် သို့မဟုတ် Password မှားနေပါတယ်။";
 
     }
 
 }
 
 
-/* ============================================================
-   LOGIN BUTTON
-============================================================ */
+/* ================= BUTTONS ================= */
 
-loginBtn.onclick =
-    function(){
+registerBtn.onclick=()=>{
 
-        if(registerMode){
+    setRegisterMode();
 
-            registerAccount();
+};
 
-        }else{
+switchLink.onclick=()=>{
 
-            loginAccount();
+    if(registerMode){
 
-        }
-
-    };
-
-
-/* ============================================================
-   GUEST
-============================================================ */
-
-guestBtn.onclick =
-    async function(){
-
-        try{
-
-            const result =
-                await auth.signInAnonymously();
-
-            await startGame(
-                result.user,
-                "Guest",
-                true
-            );
-
-        }catch(error){
-
-            console.error(error);
-
-            loginError.innerText =
-                "❌ Guest ဝင်မရပါ။ Firebase Anonymous Auth ကို Enable လုပ်ပါ။";
-
-            loginError.style.color =
-                "#ff6b6b";
-
-        }
-
-    };
-
-
-/* ============================================================
-   START GAME
-============================================================ */
-
-async function startGame(user,username,guest){
-
-    currentUser =
-        user;
-
-    currentUsername =
-        username;
-
-    isGuest =
-        guest;
-
-
-    loginPage.style.display =
-        "none";
-
-    gamePage.style.display =
-        "block";
-
-
-    document.getElementById(
-        "gameUsername"
-    ).innerText =
-        username;
-
-
-    if(guest){
-
-        score = 0;
-
-        ammo = 100;
-
-        coins = 500;
+        setLoginMode();
 
     }else{
 
-        const snap =
-            await db.ref(
-                "users/" + user.uid
-            ).once("value");
-
-        const data =
-            snap.val() || {};
-
-
-        score =
-            Number(data.score || 0);
-
-        ammo =
-            Number(data.ammo || 100);
-
-        coins =
-            Number(data.coins ?? 500);
+        setRegisterMode();
 
     }
 
+};
 
-    updateUI();
+loginBtn.onclick=()=>{
 
-    resetFishHP();
+    if(registerMode){
 
-    showMessage(
-        guest
-        ? "👻 Guest အဖြစ် ဝင်ပြီးပါပြီ!"
-        : "🎯 မင်္ဂလာပါ " + username + "!"
-    );
+        registerAccount();
 
+    }else{
 
-    if(!window.fishStarted){
-
-        window.fishStarted =
-            true;
-
-        fishIds.forEach(
-            startFish
-        );
+        loginAccount();
 
     }
 
-}
+};
 
 
-/* ============================================================
-   UPDATE UI
-============================================================ */
+/* ================= GUEST ================= */
 
-function updateUI(){
+guestBtn.onclick=async()=>{
 
-    document.getElementById(
-        "scoreValue"
-    ).innerText =
-        score;
+    if(!firebaseReady){
 
-    document.getElementById(
-        "ammoValue"
-    ).innerText =
-        ammo;
-
-    document.getElementById(
-        "coinValue"
-    ).innerText =
-        coins;
-
-}
-
-
-/* ============================================================
-   SAVE USER
-============================================================ */
-
-async function saveUser(){
-
-    if(!currentUser || isGuest){
+        loginError.innerText=
+            "❌ Firebase မတက်သေးပါ။";
 
         return;
 
     }
 
+    try{
+
+        loginError.innerText=
+            "⏳ Guest ဝင်နေပါတယ်...";
+
+        const result=
+            await auth.signInAnonymously();
+
+        await startGame(
+            result.user,
+            "Guest",
+            true
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        loginError.innerText=
+            "❌ Guest မဝင်နိုင်ပါ။ Firebase Authentication မှာ Anonymous ကို Enable လုပ်ပါ။";
+
+    }
+
+};
+
+
+/* ================= START GAME ================= */
+
+async function startGame(user,username,guest){
+
+    currentUser=user;
+    currentUsername=username;
+    isGuest=guest;
+
+    loginPage.style.display="none";
+    gamePage.style.display="block";
+
+    document.getElementById("gameUsername").innerText=username;
+
+    let data=null;
 
     try{
 
-        await db.ref(
-            "users/" + currentUser.uid
-        ).update({
+        const snap=await db
+        .ref("users/"+user.uid)
+        .once("value");
+
+        data=snap.val();
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+    if(!data){
+
+        data={
+            username:username,
+            coins:500,
+            score:0,
+            ammo:100,
+            guest:guest
+        };
+
+        try{
+
+            await db
+            .ref("users/"+user.uid)
+            .set(data);
+
+        }catch(error){
+
+            console.error(error);
+
+        }
+
+    }
+
+    score=Number(data.score ?? 0);
+    ammo=Number(data.ammo ?? 100);
+    coins=Number(data.coins ?? 500);
+
+    if(coins<0)coins=500;
+    if(ammo<0)ammo=100;
+
+    updateUI();
+    resetFishHP();
+
+    showMessage(
+        guest
+        ? "👻 Guest အဖြစ် ဝင်ပြီးပါပြီ!"
+        : "🎯 မင်္ဂလာပါ "+username+"!"
+    );
+
+}
+
+
+/* ================= UPDATE UI ================= */
+
+function updateUI(){
+
+    document.getElementById("scoreValue").innerText=score;
+    document.getElementById("ammoValue").innerText=ammo;
+    document.getElementById("coinValue").innerText=coins;
+
+}
+
+
+/* ================= SAVE ================= */
+
+async function saveUser(){
+
+    if(!currentUser || !db)return;
+
+    try{
+
+        await db
+        .ref("users/"+currentUser.uid)
+        .update({
 
             username:currentUsername,
-
             coins:coins,
-
             score:score,
-
             ammo:ammo,
+            guest:isGuest,
 
             updatedAt:
                 firebase.database.ServerValue.TIMESTAMP
@@ -1420,156 +1299,90 @@ async function saveUser(){
 
     }catch(error){
 
-        console.error(
-            "Save error:",
-            error
-        );
+        console.error("Save error:",error);
 
     }
 
 }
 
 
-/* ============================================================
-   AUTO SAVE
-============================================================ */
+/* ================= AUTO SAVE ================= */
 
-setInterval(
-    saveUser,
-    10000
-);
+setInterval(()=>{
 
+    if(currentUser){
 
-/* ============================================================
-   LOGOUT
-============================================================ */
+        saveUser();
 
-document.getElementById(
-    "logoutBtn"
-).onclick =
-    async function(){
+    }
 
-        await saveUser();
+},10000);
 
 
-        if(currentUser){
+/* ================= LOGOUT ================= */
 
-            try{
+document.getElementById("logoutBtn").onclick=async()=>{
 
-                await auth.signOut();
+    await saveUser();
 
-            }catch(e){
+    if(auth){
 
-                console.error(e);
+        try{
 
-            }
+            await auth.signOut();
+
+        }catch(error){
+
+            console.error(error);
 
         }
 
-
-        currentUser =
-            null;
-
-        currentUsername =
-            "";
-
-        isGuest =
-            false;
-
-
-        gamePage.style.display =
-            "none";
-
-        loginPage.style.display =
-            "flex";
-
-
-        loginUsername.value =
-            "";
-
-        loginPassword.value =
-            "";
-
-        loginError.innerText =
-            "";
-
-        setLoginMode();
-
-    };
-
-
-/* ============================================================
-   COIN PACK
-============================================================ */
-
-const coinPackBox =
-    document.getElementById(
-        "coinPackBox"
-    );
-
-
-document.getElementById(
-    "giftBtn"
-).onclick =
-    function(){
-
-        coinPackBox.style.display =
-            "block";
-
-    };
-
-
-document.getElementById(
-    "closePack"
-).onclick =
-    function(){
-
-        coinPackBox.style.display =
-            "none";
-
-    };
-
-
-document.querySelectorAll(
-    ".packBtn"
-).forEach(
-    function(btn){
-
-        btn.onclick =
-            async function(){
-
-                const amount =
-                    Number(
-                        this.dataset.pack
-                    );
-
-
-                coins += amount;
-
-                updateUI();
-
-                await saveUser();
-
-                showMessage(
-                    "🎁 +" +
-                    amount +
-                    " Virtual Coin ရပါပြီ!"
-                );
-
-                coinPackBox.style.display =
-                    "none";
-
-            };
-
     }
-);
+
+    currentUser=null;
+    currentUsername="";
+    isGuest=false;
+
+    gamePage.style.display="none";
+    loginPage.style.display="flex";
+
+    loginUsername.value="";
+    loginPassword.value="";
+
+    loginError.innerText="";
+
+    setLoginMode();
+
+};
 
 
-/* ============================================================
-   FISH DATA
-============================================================ */
+/* ================= SHOT COST ================= */
 
-const fishIds = [
+document.querySelectorAll(".shotBtn").forEach(btn=>{
+
+    btn.onclick=()=>{
+
+        selectedCost=
+            Number(btn.dataset.cost);
+
+        document
+        .querySelectorAll(".shotBtn")
+        .forEach(b=>b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        showMessage(
+            "🔫 ပစ်ခ "+selectedCost+" Coin ရွေးထားပါတယ်"
+        );
+
+    };
+
+});
+
+
+/* ================= FISH ================= */
+
+const fishIds=[
     "fish1",
     "fish2",
     "fish3",
@@ -1577,7 +1390,7 @@ const fishIds = [
     "fish5"
 ];
 
-const fishMaxHP = {
+const fishMaxHP={
 
     fish1:2,
     fish2:3,
@@ -1587,7 +1400,7 @@ const fishMaxHP = {
 
 };
 
-const fishEmoji = {
+const fishEmoji={
 
     fish1:"🐠",
     fish2:"🐟",
@@ -1597,82 +1410,73 @@ const fishEmoji = {
 
 };
 
+const rewards={
 
-let currentHP = {};
+    fish1:20,
+    fish2:30,
+    fish3:50,
+    fish4:100,
+    fish5:200
 
-let fishPositions = {};
+};
+
+let currentHP={};
+let fishPositions={};
 
 
 function resetFishHP(){
 
-    fishIds.forEach(
-        function(id){
+    fishIds.forEach(id=>{
 
-            currentHP[id] =
-                fishMaxHP[id];
+        currentHP[id]=fishMaxHP[id];
 
-            updateHP(id);
+        updateHP(id);
 
-        }
-    );
+        startFish(id);
+
+    });
 
 }
 
 
 function updateHP(id){
 
-    const bar =
-        document.getElementById(
-            "hp" +
-            id.replace("fish","")
-        );
+    const bar=document.getElementById(
+        "hp"+id.replace("fish","")
+    );
 
-    if(!bar) return;
+    if(!bar)return;
 
-
-    const percent =
-        currentHP[id] /
-        fishMaxHP[id] *
-        100;
-
-
-    bar.style.width =
-        percent + "%";
+    bar.style.width=
+        (
+            currentHP[id]/
+            fishMaxHP[id]*
+            100
+        )+"%";
 
 }
 
 
-/* ============================================================
-   FISH MOVEMENT
-============================================================ */
+/* ================= FISH MOVEMENT ================= */
 
 function startFish(id){
 
-    const fish =
-        document.getElementById(id);
+    if(fishPositions[id])return;
 
+    const fish=document.getElementById(id);
 
-    let y =
-        15 + Math.random() * 60;
+    let y=15+Math.random()*60;
 
-    let direction =
-        Math.random() > .5;
+    let direction=Math.random()>.5;
 
-    let x =
-        direction ? -15 : 115;
+    let x=direction?-15:115;
 
-    let speed =
-        .18 + Math.random() * .25;
+    let speed=.15+Math.random()*.20;
 
+    fish.style.top=y+"%";
+    fish.style.left=x+"%";
 
-    fish.style.top =
-        y + "%";
-
-    fish.style.left =
-        x + "%";
-
-
-    fishPositions[id] = {
+    fishPositions[id]={
 
         x:x,
         y:y,
@@ -1681,142 +1485,116 @@ function startFish(id){
 
     };
 
+    setInterval(()=>{
 
-    setInterval(
-        function(){
+        const pos=fishPositions[id];
 
-            const pos =
-                fishPositions[id];
+        if(!pos)return;
 
-            if(!pos) return;
+        if(pos.direction){
 
+            pos.x+=pos.speed;
 
-            if(pos.direction){
+            if(pos.x>115){
 
-                pos.x +=
-                    pos.speed;
+                pos.x=-15;
 
-                if(pos.x > 115){
+                pos.y=
+                    15+Math.random()*60;
 
-                    pos.x = -15;
+                fish.style.top=
+                    pos.y+"%";
 
-                    pos.y =
-                        15 +
-                        Math.random() * 60;
+                currentHP[id]=
+                    fishMaxHP[id];
 
-                    fish.style.top =
-                        pos.y + "%";
-
-                    currentHP[id] =
-                        fishMaxHP[id];
-
-                    updateHP(id);
-
-                }
-
-            }else{
-
-                pos.x -=
-                    pos.speed;
-
-                if(pos.x < -20){
-
-                    pos.x = 115;
-
-                    pos.y =
-                        15 +
-                        Math.random() * 60;
-
-                    fish.style.top =
-                        pos.y + "%";
-
-                    currentHP[id] =
-                        fishMaxHP[id];
-
-                    updateHP(id);
-
-                }
+                updateHP(id);
 
             }
 
+        }else{
 
-            fish.style.left =
-                pos.x + "%";
+            pos.x-=pos.speed;
 
+            if(pos.x<-20){
 
-        },
-        30
-    );
+                pos.x=115;
+
+                pos.y=
+                    15+Math.random()*60;
+
+                fish.style.top=
+                    pos.y+"%";
+
+                currentHP[id]=
+                    fishMaxHP[id];
+
+                updateHP(id);
+
+            }
+
+        }
+
+        fish.style.left=
+            pos.x+"%";
+
+    },30);
 
 }
 
 
-/* ============================================================
-   CANNON
-============================================================ */
+/* ================= CANNON ================= */
 
-const cannon =
-    document.getElementById(
-        "cannon"
-    );
+const cannon=
+    document.getElementById("cannon");
 
-const barrel =
-    document.getElementById(
-        "barrel"
-    );
+const barrel=
+    document.getElementById("barrel");
 
-
-let cannonAngle = 0;
+let cannonAngle=0;
 
 
 function aimCannon(x,y){
 
-    const rect =
+    const rect=
         cannon.getBoundingClientRect();
 
+    const centerX=
+        rect.left+rect.width/2;
 
-    const centerX =
-        rect.left +
-        rect.width / 2;
+    const centerY=
+        rect.top+rect.height/2;
 
+    const dx=x-centerX;
+    const dy=y-centerY;
 
-    const centerY =
-        rect.top +
-        rect.height / 2;
+    cannonAngle=
+        Math.atan2(dx,-dy)
+        *180/Math.PI;
 
-
-    const dx =
-        x - centerX;
-
-    const dy =
-        y - centerY;
-
-
-    cannonAngle =
-        Math.atan2(
-            dx,
-            -dy
-        ) *
-        180 /
-        Math.PI;
-
-
-    barrel.style.transform =
-        "translate(-50%,-100%) rotate(" +
-        cannonAngle +
-        "deg)";
+    barrel.style.transform=
+        "translate(-50%,-100%) rotate("+
+        cannonAngle+"deg)";
 
 }
 
 
-/* ============================================================
-   SHOOT
-   Virtual game only
-============================================================ */
+/* ================= SHOOT ================= */
 
 function shoot(){
 
-    if(ammo <= 0){
+    if(!currentUser){
+
+        showMessage(
+            "❌ အရင် Login ဝင်ပါ",
+            false
+        );
+
+        return;
+
+    }
+
+    if(ammo<=0){
 
         showMessage(
             "❌ Ammo ကုန်ပါပြီ",
@@ -1827,229 +1605,178 @@ function shoot(){
 
     }
 
+    /* Virtual Coin ပစ်ခ */
 
+    if(coins<selectedCost){
+
+        showMessage(
+            "❌ Coin မလုံလောက်ပါ",
+            false
+        );
+
+        return;
+
+    }
+
+    coins-=selectedCost;
     ammo--;
 
     updateUI();
 
+    saveUser();
 
-    const rect =
+
+    const rect=
         cannon.getBoundingClientRect();
 
+    let x=
+        rect.left+
+        rect.width/2;
 
-    let x =
-        rect.left +
-        rect.width / 2;
+    let y=
+        rect.top+
+        rect.height/2;
 
-    let y =
-        rect.top +
-        rect.height / 2;
+    const angle=
+        cannonAngle*Math.PI/180;
 
+    const speed=16;
 
-    const angle =
-        cannonAngle *
-        Math.PI /
-        180;
+    const bullet=
+        document.createElement("div");
 
+    bullet.className="bullet";
 
-    const speed =
-        16;
+    gamePage.appendChild(bullet);
 
-
-    const bullet =
-        document.createElement(
-            "div"
-        );
-
-
-    bullet.className =
-        "bullet";
-
-
-    document.getElementById(
-        "gamePage"
-    ).appendChild(
-        bullet
-    );
-
-
-    let hit = false;
+    let hit=false;
 
 
     function moveBullet(){
 
-        if(hit) return;
+        if(hit)return;
+
+        x+=Math.sin(angle)*speed;
+        y-=Math.cos(angle)*speed;
+
+        bullet.style.left=
+            (x-4)+"px";
+
+        bullet.style.top=
+            (y-9)+"px";
 
 
-        x +=
-            Math.sin(angle) *
-            speed;
+        for(const id of fishIds){
 
+            const fish=
+                document.getElementById(id);
 
-        y -=
-            Math.cos(angle) *
-            speed;
-
-
-        bullet.style.left =
-            (x - 3.5) +
-            "px";
-
-
-        bullet.style.top =
-            (y - 9) +
-            "px";
-
-
-        for(
-            const id of fishIds
-        ){
-
-            const fish =
-                document.getElementById(
-                    id
-                );
-
-
-            const r =
+            const r=
                 fish.getBoundingClientRect();
 
-
             if(
-                x >= r.left &&
-                x <= r.right &&
-                y >= r.top &&
-                y <= r.bottom
+                x>=r.left &&
+                x<=r.right &&
+                y>=r.top &&
+                y<=r.bottom
             ){
 
-                hit = true;
+                hit=true;
 
                 bullet.remove();
 
-
                 currentHP[id]--;
-
 
                 updateHP(id);
 
 
-                const effect =
-                    document.createElement(
-                        "div"
-                    );
+                const effect=
+                    document.createElement("div");
+
+                effect.className="hitEffect";
+                effect.innerText="💥";
+
+                effect.style.left=x+"px";
+                effect.style.top=y+"px";
+
+                gamePage.appendChild(effect);
+
+                setTimeout(()=>{
+                    effect.remove();
+                },300);
 
 
-                effect.className =
-                    "hitEffect";
+                if(currentHP[id]<=0){
 
+                    const reward=
+                        rewards[id];
 
-                effect.innerText =
-                    "💥";
-
-
-                effect.style.left =
-                    x + "px";
-
-
-                effect.style.top =
-                    y + "px";
-
-
-                gamePage.appendChild(
-                    effect
-                );
-
-
-                setTimeout(
-                    () =>
-                        effect.remove(),
-                    300
-                );
-
-
-                if(
-                    currentHP[id] <= 0
-                ){
-
-                    /*
-                      အပျော်သဘော virtual reward
-                    */
-
-                    const reward = {
-
-                        fish1:20,
-                        fish2:30,
-                        fish3:50,
-                        fish4:100,
-                        fish5:200
-
-                    }[id];
-
-
-                    coins += reward;
-
-                    score += reward;
-
+                    coins+=reward;
+                    score+=reward;
 
                     updateUI();
 
-
                     showMessage(
-                        "🎯 " +
-                        fishEmoji[id] +
-                        " ရပြီး +" +
-                        reward +
+                        "🎯 "+fishEmoji[id]+
+                        " ရပြီး +"+
+                        reward+
                         " Virtual Coin"
                     );
 
 
-                    setTimeout(
-                        function(){
+                    const float=
+                        document.createElement("div");
 
-                            currentHP[id] =
-                                fishMaxHP[id];
+                    float.className="coinFloat";
+                    float.innerText=
+                        "+"+reward+" 🪙";
 
-                            updateHP(id);
+                    float.style.left=x+"px";
+                    float.style.top=y+"px";
 
+                    gamePage.appendChild(float);
 
-                            const pos =
-                                fishPositions[id];
-
-
-                            pos.x =
-                                Math.random() > .5
-                                ? -15
-                                : 115;
+                    setTimeout(()=>{
+                        float.remove();
+                    },800);
 
 
-                            pos.y =
-                                15 +
-                                Math.random() * 60;
+                    setTimeout(()=>{
 
+                        currentHP[id]=
+                            fishMaxHP[id];
 
-                            fish.style.left =
-                                pos.x + "%";
+                        updateHP(id);
 
+                        const pos=
+                            fishPositions[id];
 
-                            fish.style.top =
-                                pos.y + "%";
+                        pos.x=
+                            Math.random()>.5
+                            ? -15
+                            : 115;
 
+                        pos.y=
+                            15+
+                            Math.random()*60;
 
-                        },
-                        700
-                    );
+                        fish.style.left=
+                            pos.x+"%";
 
+                        fish.style.top=
+                            pos.y+"%";
+
+                    },700);
 
                 }else{
 
                     showMessage(
-                        "💥 " +
-                        fishEmoji[id] +
+                        "💥 "+
+                        fishEmoji[id]+
                         " ထိပါပြီ!"
                     );
 
                 }
-
 
                 saveUser();
 
@@ -2061,13 +1788,13 @@ function shoot(){
 
 
         if(
-            x < -60 ||
-            x > innerWidth + 60 ||
-            y < -60 ||
-            y > innerHeight + 60
+            x<-60 ||
+            x>innerWidth+60 ||
+            y<-60 ||
+            y>innerHeight+60
         ){
 
-            hit = true;
+            hit=true;
 
             bullet.remove();
 
@@ -2075,28 +1802,20 @@ function shoot(){
 
         }
 
-
-        requestAnimationFrame(
-            moveBullet
-        );
+        requestAnimationFrame(moveBullet);
 
     }
 
-
-    requestAnimationFrame(
-        moveBullet
-    );
+    requestAnimationFrame(moveBullet);
 
 }
 
 
-/* ============================================================
-   CANNON TOUCH
-============================================================ */
+/* ================= CANNON TOUCH ================= */
 
 cannon.addEventListener(
     "pointerdown",
-    function(e){
+    e=>{
 
         e.preventDefault();
 
@@ -2113,7 +1832,7 @@ cannon.addEventListener(
 
 cannon.addEventListener(
     "pointermove",
-    function(e){
+    e=>{
 
         if(e.buttons){
 
@@ -2128,208 +1847,157 @@ cannon.addEventListener(
 );
 
 
-/* ============================================================
-   AUTO
-============================================================ */
+/* ================= AUTO ================= */
 
-let autoMode = false;
-
-let autoTimer = null;
+let autoMode=false;
+let autoTimer=null;
 
 
-document.getElementById(
-    "autoBtn"
-).onclick =
-    function(){
+document.getElementById("autoBtn").onclick=function(){
 
-        autoMode =
-            !autoMode;
+    autoMode=!autoMode;
 
+    if(autoMode){
 
-        if(autoMode){
+        this.innerText="STOP";
+        this.style.background="green";
 
-            this.innerText =
-                "STOP";
+        autoTimer=setInterval(()=>{
 
-            this.style.background =
-                "green";
+            if(
+                ammo<=0 ||
+                coins<selectedCost
+            ){
 
+                autoMode=false;
 
-            autoTimer =
-                setInterval(
-                    function(){
+                clearInterval(autoTimer);
 
-                        if(ammo <= 0){
+                document.getElementById(
+                    "autoBtn"
+                ).innerText="AUTO";
 
-                            autoMode =
-                                false;
+                document.getElementById(
+                    "autoBtn"
+                ).style.background="#e00000";
 
-                            clearInterval(
-                                autoTimer
-                            );
+                return;
 
-                            document.getElementById(
-                                "autoBtn"
-                            ).innerText =
-                                "AUTO";
+            }
 
-                            return;
+            cannonAngle=
+                Math.random()*360-180;
 
-                        }
+            barrel.style.transform=
+                "translate(-50%,-100%) rotate("+
+                cannonAngle+"deg)";
 
+            shoot();
 
-                        cannonAngle =
-                            Math.random() *
-                            360 -
-                            180;
+        },700);
 
+    }else{
 
-                        barrel.style.transform =
-                            "translate(-50%,-100%) rotate(" +
-                            cannonAngle +
-                            "deg)";
+        clearInterval(autoTimer);
 
-
-                        shoot();
-
-
-                    },
-                    700
-                );
-
-
-        }else{
-
-            clearInterval(
-                autoTimer
-            );
-
-            this.innerText =
-                "AUTO";
-
-            this.style.background =
-                "#e00000";
-
-        }
-
-    };
-
-
-/* ============================================================
-   CHAT
-============================================================ */
-
-const chatBox =
-    document.getElementById(
-        "chatBox"
-    );
-
-const chatMessages =
-    document.getElementById(
-        "chatMessages"
-    );
-
-const chatInput =
-    document.getElementById(
-        "chatInput"
-    );
-
-
-document.getElementById(
-    "chatBtn"
-).onclick =
-    function(){
-
-        chatBox.style.display =
-            "block";
-
-        loadChat();
-
-        setTimeout(
-            () =>
-                chatInput.focus(),
-            100
-        );
-
-    };
-
-
-document.getElementById(
-    "closeChat"
-).onclick =
-    function(){
-
-        chatBox.style.display =
-            "none";
-
-    };
-
-
-/* ============================================================
-   SEND CHAT
-============================================================ */
-
-async function sendChat(){
-
-    const text =
-        chatInput.value.trim();
-
-
-    if(!text) return;
-
-
-    if(!currentUser){
-
-        return;
+        this.innerText="AUTO";
+        this.style.background="#e00000";
 
     }
 
-
-    const chatRef =
-        db.ref("supportMessages")
-        .push();
+};
 
 
-    await chatRef.set({
+/* ================= CHAT ================= */
 
-        uid:
-            currentUser.uid,
+const chatBox=
+    document.getElementById("chatBox");
 
-        username:
-            currentUsername,
+const chatMessages=
+    document.getElementById("chatMessages");
 
-        message:
-            text,
-
-        guest:
-            isGuest,
-
-        time:
-            firebase.database.ServerValue.TIMESTAMP
-
-    });
+const chatInput=
+    document.getElementById("chatInput");
 
 
-    chatInput.value =
-        "";
+document.getElementById("chatBtn").onclick=()=>{
 
+    chatBox.style.display="block";
 
     loadChat();
+
+    setTimeout(()=>{
+        chatInput.focus();
+    },100);
+
+};
+
+
+document.getElementById("closeChat").onclick=()=>{
+
+    chatBox.style.display="none";
+
+};
+
+
+/* ================= SEND CHAT ================= */
+
+async function sendChat(){
+
+    const text=
+        chatInput.value.trim();
+
+    if(!text)return;
+
+    if(!currentUser)return;
+
+    try{
+
+        const ref=
+            db.ref("supportMessages").push();
+
+        await ref.set({
+
+            uid:currentUser.uid,
+
+            username:currentUsername,
+
+            message:text,
+
+            guest:isGuest,
+
+            time:
+                firebase.database.ServerValue.TIMESTAMP
+
+        });
+
+        chatInput.value="";
+
+        loadChat();
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "❌ စာပို့မရပါ",
+            false
+        );
+
+    }
 
 }
 
 
-document.getElementById(
-    "sendChat"
-).onclick =
-    sendChat;
+document.getElementById("sendChat")
+.onclick=sendChat;
 
 
 chatInput.addEventListener(
     "keydown",
-    function(e){
+    e=>{
 
-        if(e.key === "Enter"){
+        if(e.key==="Enter"){
 
             sendChat();
 
@@ -2339,146 +2007,94 @@ chatInput.addEventListener(
 );
 
 
-/* ============================================================
-   LOAD CHAT
-============================================================ */
+/* ================= LOAD CHAT ================= */
 
 function loadChat(){
 
-    if(!currentUser) return;
+    if(!currentUser)return;
 
-
-    db.ref(
-        "supportMessages"
-    )
+    db.ref("supportMessages")
     .limitToLast(50)
-    .once(
-        "value",
-        function(snapshot){
+    .once("value")
+    .then(snapshot=>{
 
-            chatMessages.innerHTML =
-                "";
+        chatMessages.innerHTML="";
+
+        const data=snapshot.val();
+
+        if(!data){
+
+            chatMessages.innerHTML=
+                '<div style="color:#777;text-align:center;">'+
+                'အကူအညီလိုပါက စာပို့ပါ'+
+                '</div>';
+
+            return;
+
+        }
+
+        Object.keys(data).forEach(key=>{
+
+            const item=data[key];
+
+            const div=
+                document.createElement("div");
+
+            div.className="chatMsg";
 
 
-            const data =
-                snapshot.val();
+            const user=
+                document.createElement("div");
+
+            user.className="chatUser";
+
+            user.innerText=
+                item.username||"User";
 
 
-            if(!data){
+            const msg=
+                document.createElement("div");
 
-                chatMessages.innerHTML =
-                    '<div style="color:#777;text-align:center;">' +
-                    'အကူအညီလိုပါက စာပို့ပါ' +
-                    '</div>';
+            msg.innerText=
+                item.message||"";
 
-                return;
+
+            const time=
+                document.createElement("div");
+
+            time.className="chatTime";
+
+            if(item.time){
+
+                time.innerText=
+                    new Date(item.time)
+                    .toLocaleString();
 
             }
 
+            div.appendChild(user);
+            div.appendChild(msg);
+            div.appendChild(time);
 
-            Object.keys(data)
-            .forEach(
-                function(key){
+            chatMessages.appendChild(div);
 
-                    const item =
-                        data[key];
+        });
 
+        chatMessages.scrollTop=
+            chatMessages.scrollHeight;
 
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    div.className =
-                        "chatMsg";
-
-
-                    const user =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    user.className =
-                        "chatUser";
-
-
-                    user.innerText =
-                        item.username ||
-                        "User";
-
-
-                    const msg =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    msg.innerText =
-                        item.message ||
-                        "";
-
-
-                    const time =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    time.className =
-                        "chatTime";
-
-
-                    if(item.time){
-
-                        time.innerText =
-                            new Date(
-                                item.time
-                            ).toLocaleString();
-
-                    }
-
-
-                    div.appendChild(
-                        user
-                    );
-
-                    div.appendChild(
-                        msg
-                    );
-
-                    div.appendChild(
-                        time
-                    );
-
-
-                    chatMessages.appendChild(
-                        div
-                    );
-
-                }
-            );
-
-
-            chatMessages.scrollTop =
-                chatMessages.scrollHeight;
-
-        }
-    );
+    });
 
 }
 
 
-/* ============================================================
-   ENTER KEY
-============================================================ */
+/* ================= LOGIN ENTER ================= */
 
 loginPassword.addEventListener(
     "keydown",
-    function(e){
+    e=>{
 
-        if(e.key === "Enter"){
+        if(e.key==="Enter"){
 
             loginBtn.click();
 
@@ -2490,9 +2106,9 @@ loginPassword.addEventListener(
 
 loginUsername.addEventListener(
     "keydown",
-    function(e){
+    e=>{
 
-        if(e.key === "Enter"){
+        if(e.key==="Enter"){
 
             loginPassword.focus();
 
@@ -2501,7 +2117,66 @@ loginUsername.addEventListener(
     }
 );
 
+
+/* ================= BUBBLES ================= */
+
+for(let i=0;i<18;i++){
+
+    const b=
+        document.createElement("div");
+
+    b.className="bubble";
+
+    const size=
+        5+Math.random()*18;
+
+    b.style.width=size+"px";
+    b.style.height=size+"px";
+
+    b.style.left=
+        Math.random()*100+"%";
+
+    b.style.animationDuration=
+        (5+Math.random()*8)+"s";
+
+    b.style.animationDelay=
+        (-Math.random()*10)+"s";
+
+    gamePage.appendChild(b);
+
+}
+
+
+/* ================= AUTH STATE ================= */
+
+if(firebaseReady){
+
+    auth.onAuthStateChanged(
+        user=>{
+
+            if(!user)return;
+
+            /*
+             Page reload ဖြစ်တဲ့အခါ
+             Anonymous Guest ကို ပြန်ဝင်ပေးမယ်။
+            */
+
+            if(user.isAnonymous){
+
+                startGame(
+                    user,
+                    "Guest",
+                    true
+                );
+
+            }
+
+        }
+    );
+
+}
+
 </script>
 
 </body>
-        </html>
+      </html>
