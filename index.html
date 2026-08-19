@@ -788,6 +788,33 @@ const firebaseConfig = {
     appId:"1:811139202151:web:cc40c540bdcc9631bc28c2"
 };
 
+
+/* ================= REMOTE SETTINGS ================= */
+const REMOTE_DEFAULTS={
+  startingCoins:500,fishEnabled:true,fishSpeedMultiplier:1,autoEnabled:true,autoInterval:700,
+  shotCosts:{10:true,20:true,50:true,200:true},
+  fishHP:{fish1:2,fish2:3,fish3:4,fish4:6,fish5:10},
+  fishRewards:{fish1:20,fish2:30,fish3:50,fish4:100,fish5:200}
+};
+let remoteSettings=JSON.parse(JSON.stringify(REMOTE_DEFAULTS));
+let remoteSettingsStarted=false;
+function applyRemoteSettings(raw){
+  const r=raw||{};
+  remoteSettings={...REMOTE_DEFAULTS,...r,shotCosts:{...REMOTE_DEFAULTS.shotCosts,...(r.shotCosts||{})},fishHP:{...REMOTE_DEFAULTS.fishHP,...(r.fishHP||{})},fishRewards:{...REMOTE_DEFAULTS.fishRewards,...(r.fishRewards||{})}};
+  if(typeof fishMaxHP!=="undefined") fishIds.forEach(id=>{const v=Number(remoteSettings.fishHP[id]);if(Number.isFinite(v)&&v>=1)fishMaxHP[id]=v;});
+  if(typeof rewards!=="undefined") fishIds.forEach(id=>{const v=Number(remoteSettings.fishRewards[id]);if(Number.isFinite(v)&&v>=0)rewards[id]=v;});
+  if(typeof fishIds!=="undefined") fishIds.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=remoteSettings.fishEnabled?"":"none";});
+  document.querySelectorAll(".shotBtn").forEach(btn=>{const c=String(Number(btn.dataset.cost));btn.style.display=remoteSettings.shotCosts[c]===false?"none":"";});
+  const ab=document.getElementById("autoBtn");
+  if(ab){ab.style.display=remoteSettings.autoEnabled?"":"none";if(remoteSettings.autoEnabled===false&&typeof autoMode!=="undefined"&&autoMode){autoMode=false;if(autoTimer)clearInterval(autoTimer);ab.innerText="AUTO";}}
+  if(typeof resetFishHP==="function")resetFishHP();
+}
+function startRemoteSettings(){
+  if(remoteSettingsStarted||!db)return;remoteSettingsStarted=true;
+  db.ref("gameSettings").on("value",snap=>applyRemoteSettings(snap.exists()?snap.val():REMOTE_DEFAULTS),err=>console.error("Remote settings error",err));
+}
+/* ================= END REMOTE SETTINGS ================= */
+
 let firebaseReady=false;
 let auth=null;
 let db=null;
@@ -800,6 +827,7 @@ try{
     db=firebase.database();
 
     firebaseReady=true;
+    startRemoteSettings();
 
 }catch(error){
 
@@ -819,7 +847,7 @@ let isGuest=false;
 
 let score=0;
 
-let coins=500;
+let coins=Number(remoteSettings.startingCoins||500);
 
 let registerMode=false;
 
@@ -1000,7 +1028,7 @@ async function registerAccount(){
 
             username:username,
             usernameKey:key,
-            coins:500,
+            coins:Number(remoteSettings.startingCoins||500),
             score:0,
             guest:false,
             createdAt:
@@ -1192,32 +1220,70 @@ async function startGame(user,username,guest){
     gamePage.style.display="block";
 
     document.getElementById("gameUsername").innerText=username;
+
     const accountIdEl=document.getElementById("accountId");
     if(accountIdEl) accountIdEl.innerText="ID: "+user.uid;
 
     let data=null;
+    let firebaseReadOK=false;
+    let walletReadOK=false;
+    let walletCoins=null;
+
+    /* ID အလိုက် Coin Wallet */
+    try{
+        const snap=await db.ref("users/"+user.uid).once("value");
+        firebaseReadOK=true;
+        if(snap.exists()) data=snap.val();
+    }catch(error){
+        console.error("Firebase load error:",error);
+    }
+
+    if(firebaseReadOK){
+        try{
+            const walletSnap=await db.ref("wallets/"+user.uid+"/coins").once("value");
+            walletReadOK=true;
+            if(walletSnap.exists()) walletCoins=Number(walletSnap.val());
+        }catch(error){
+            console.error("Wallet load error:",error);
+        }
+    }
+
+    /*
+       Firebase ဖတ်မရတဲ့အချိန် data မရှိဘူးလို့
+       မယူဆတော့ဘူး။ အဲဒီအချိန် 500 ကို ပြန်သတ်မှတ်ပြီး
+       အရင် Coin ကို overwrite မလုပ်တော့ဘူး။
+    */
+
+    const cacheKey="fishgame_user_"+user.uid;
+    let cached=null;
 
     try{
 
-        const snap=await db
-        .ref("users/"+user.uid)
-        .once("value");
-
-        data=snap.val();
+        cached=JSON.parse(
+            localStorage.getItem(cacheKey) || "null"
+        );
 
     }catch(error){
 
-        console.error(error);
+        cached=null;
 
     }
 
-    if(!data){
+    /*
+       Firebase က တကယ် data မရှိတာကို အတည်ပြုမှ
+       အသစ်အဖြစ် 500 / 0 စမယ်။
+    */
+
+    if(!data && firebaseReadOK){
 
         data={
             username:username,
-            coins:500,
+            usernameKey:usernameKey(username),
+            accountId:user.uid,
+            coins:Number(remoteSettings.startingCoins||500),
             score:0,
-            guest:guest
+            guest:guest,
+            linked:!guest
         };
 
         try{
@@ -1228,16 +1294,78 @@ async function startGame(user,username,guest){
 
         }catch(error){
 
-            console.error(error);
+            console.error("Initial Firebase save error:",error);
 
         }
 
     }
 
-    score=Number(data.score ?? 0);
-    coins=Number(data.coins ?? 500);
+    /*
+       Firebase read error ဖြစ်ရင် local cache ကို သုံးမယ်။
+    */
 
-    if(coins<0)coins=500;
+    if(!data && cached){
+
+        data=cached;
+
+    }
+
+    if(!data){
+
+        data={
+            username:username,
+            coins:Number(remoteSettings.startingCoins||500),
+            score:0,
+            guest:guest
+        };
+
+    }
+
+    score=Number(data.score);
+
+    /* wallets/{UID}/coins ကို Coin အမှန်အဖြစ်သုံးမယ် */
+    if(walletReadOK && Number.isFinite(walletCoins) && walletCoins>=0){
+        coins=walletCoins;
+    }else if(firebaseReadOK && data && Number.isFinite(Number(data.coins)) && Number(data.coins)>=0){
+        /* အဟောင်း users/{UID}/coins ကနေ တစ်ကြိမ် migrate */
+        coins=Number(data.coins);
+        try{
+            await db.ref("wallets/"+user.uid).set({
+                coins:coins,
+                accountId:user.uid,
+                updatedAt:firebase.database.ServerValue.TIMESTAMP
+            });
+        }catch(error){
+            console.error("Wallet migration error:",error);
+        }
+    }else{
+        coins=Number(remoteSettings.startingCoins||500);
+    }
+
+    if(!Number.isFinite(score) || score<0) score=0;
+    if(!Number.isFinite(coins) || coins<0) coins=Number(remoteSettings.startingCoins||500);
+
+    try{
+
+        localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+                username:currentUsername,
+                usernameKey:usernameKey(currentUsername),
+                accountId:user.uid,
+                coins:coins,
+                score:score,
+                guest:isGuest,
+                linked:!isGuest,
+                savedAt:Date.now()
+            })
+        );
+
+    }catch(error){
+
+        console.error("Cache save error:",error);
+
+    }
 
     updateUI();
     resetFishHP();
@@ -1265,30 +1393,71 @@ function updateUI(){
 
 async function saveUser(){
 
-    if(!currentUser || !db)return;
+    if(!currentUser)return;
+
+    const cacheKey="fishgame_user_"+currentUser.uid;
+
+    /*
+       Local cache ကို အရင်သိမ်းမယ်။
+       Refresh / Page close လုပ်ရင် Coin နောက်ဆုံးတန်ဖိုး
+       မပျောက်အောင် ကာကွယ်ပေးတယ်။
+    */
+
+    const localData={
+        username:currentUsername,
+        usernameKey:usernameKey(currentUsername),
+        accountId:currentUser.uid,
+        coins:Number(coins),
+        score:Number(score),
+        guest:isGuest,
+        linked:!isGuest,
+        savedAt:Date.now()
+    };
 
     try{
 
-        await db
-        .ref("users/"+currentUser.uid)
-        .update({
+        localStorage.setItem(
+            cacheKey,
+            JSON.stringify(localData)
+        );
 
+    }catch(error){
+
+        console.error("Local save error:",error);
+
+    }
+
+    /*
+       Account နဲ့ နောက်တစ်ခါဝင်ရင် Firebase ကနေ
+       Coin / Point ကို ပြန်ရအောင် Firebase ထဲလည်း သိမ်းမယ်။
+    */
+
+    if(!db)return;
+
+    try{
+
+        /* UID တစ်ခုချင်းစီအတွက် Coin ကို သီးသန့်သိမ်း */
+        await db.ref("wallets/"+currentUser.uid).update({
+            accountId:currentUser.uid,
+            coins:Number(coins),
+            updatedAt:firebase.database.ServerValue.TIMESTAMP
+        });
+
+        /* users/{UID} ထဲမှာ mirror value ထားမယ် */
+        await db.ref("users/"+currentUser.uid).update({
             username:currentUsername,
             usernameKey:usernameKey(currentUsername),
             accountId:currentUser.uid,
-            coins:coins,
-            score:score,
+            coins:Number(coins),
+            score:Number(score),
             guest:isGuest,
             linked:!isGuest,
-
-            updatedAt:
-                firebase.database.ServerValue.TIMESTAMP
-
+            updatedAt:firebase.database.ServerValue.TIMESTAMP
         });
 
     }catch(error){
 
-        console.error("Save error:",error);
+        console.error("Firebase save error:",error);
 
     }
 
@@ -1379,7 +1548,7 @@ const fishIds=[
     "fish5"
 ];
 
-const fishMaxHP={
+let fishMaxHP={
 
     fish1:2,
     fish2:3,
@@ -1399,7 +1568,7 @@ const fishEmoji={
 
 };
 
-const rewards={
+let rewards={
 
     fish1:20,
     fish2:30,
@@ -1460,7 +1629,7 @@ function startFish(id){
 
     let x=direction?-15:115;
 
-    let speed=.15+Math.random()*.20;
+    let speed=(.15+Math.random()*.20)*Number(remoteSettings.fishSpeedMultiplier||1);
 
     fish.style.top=y+"%";
     fish.style.left=x+"%";
@@ -2226,6 +2395,65 @@ if(firebaseReady){
 
 }
 
+</script>
+
+
+<script>
+/* ===== COIN / POINT EMERGENCY SAVE ===== */
+(function(){
+
+  function emergencySave(){
+
+    try{
+
+      if(typeof currentUser !== "undefined" && currentUser){
+
+        const key="fishgame_user_"+currentUser.uid;
+
+        localStorage.setItem(
+          key,
+          JSON.stringify({
+            username:currentUsername,
+            usernameKey:usernameKey(currentUsername),
+            accountId:currentUser.uid,
+            coins:Number(coins),
+            score:Number(score),
+            guest:isGuest,
+            linked:!isGuest,
+            savedAt:Date.now()
+          })
+        );
+
+      }
+
+    }catch(error){
+
+      console.error("Emergency cache save:",error);
+
+    }
+
+  }
+
+  document.addEventListener(
+    "visibilitychange",
+    function(){
+
+      if(document.visibilityState==="hidden"){
+
+        emergencySave();
+
+        if(typeof saveUser==="function"){
+          saveUser();
+        }
+
+      }
+
+    }
+  );
+
+  window.addEventListener("pagehide", emergencySave);
+
+})();
 </script>
 
 </body>
